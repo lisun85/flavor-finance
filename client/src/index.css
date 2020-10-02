@@ -1,0 +1,19 @@
+body {
+  background: #F0E7EA;
+  margin: 0;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+button {
+  font-family: 'Quicksand';
+}
+h1, .courgette {
+  font-family: 'Courgette';
+}

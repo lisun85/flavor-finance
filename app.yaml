@@ -1,0 +1,24 @@
+
+# See https://cloud.google.com/appengine/docs/flexible/nodejs/configuring-your-app-with-app-yaml
+# and https://cloud.google.com/appengine/docs/flexible/nodejs/reference/app-yaml for more info
+
+runtime: nodejs
+env: flex
+
+# The settings below are to reduce costs during testing and not appropriate for production use.
+# You would obviously want to increase the values for computing resources and look into auto scaling when running production workloads.
+
+manual_scaling:
+  instances: 1
+
+resources:
+  cpu: .5
+  memory_gb: 0.5
+  disk_size_gb: 10
+
+handlers:
+  - url: /
+    static_files: client/build/index.html
+    upload: client/build/index.html
+  - url: /
+    static_dir: client/build
