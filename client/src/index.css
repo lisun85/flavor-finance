@@ -17,3 +17,11 @@ button {
 h1, .courgette {
   font-family: 'Courgette';
 }
+
+.get-price {
+  border: 1px solid red;
+}
+
+.latest-price {
+  border: 1px solid orange;
+}

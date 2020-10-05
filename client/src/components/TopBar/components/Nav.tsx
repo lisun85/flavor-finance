@@ -10,6 +10,7 @@ const Nav: React.FC = () => {
       <StyledLink exact activeClassName="active" to="/farm">Farm</StyledLink>
       <StyledLink exact activeClassName="active" to="/history">History</StyledLink>
       <StyledLink activeClassName="active" to="/about">About</StyledLink>
+      <StyledLink activeClassName="active" to="/pricefeed">Price Feed</StyledLink>
     </StyledNav>
   )
 }

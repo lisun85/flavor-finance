@@ -23,6 +23,7 @@ import Farm from 'views/Farm'
 import FAQ from 'views/FAQ'
 import Home from 'views/Home'
 import Funds from 'views/Funds'
+import PriceFeed from "./views/PriceFeed"
 
 const App: React.FC = () => {
   const [mobileMenu, setMobileMenu] = useState(false)
@@ -52,6 +53,9 @@ const App: React.FC = () => {
           </Route>
           <Route exact path="/funds">
             <Funds />
+          </Route>
+          <Route exact path="/pricefeed">
+            <PriceFeed />
           </Route>
         </Switch>
       </Providers>
