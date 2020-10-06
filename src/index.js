@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const account = require('./account');
+const asset = require('./asset');
 const path = require("path");
 const app = express();
 
@@ -31,6 +32,28 @@ app.post('/api/account', (req, res, next) => {
 
 app.get('/api/test', (req, res, next) => {
     res.json({ 'message': 'hello world' });
+});
+
+app.get('/api/cyclePrizePeriod', (req, res, next) => {
+    asset.endPrizePeriod();
+    asset.startPrizePeriod().then(results => {
+      res.json({ results });
+    })
+    .catch(next);
+});
+
+app.get('/api/updateAssetPrices', (req, res, next) => {
+    asset.updateAssetPrices().then(results => {
+      res.json({ results });
+    })
+    .catch(next);
+});
+
+app.get('/api/assetPrices', (req, res, next) => {
+    asset.getAssetPrices().then(results => {
+      res.json({ results });
+    })
+    .catch(next);
 });
 
 app.get("/", (req, res) => {
