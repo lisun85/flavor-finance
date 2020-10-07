@@ -7,7 +7,7 @@ const Datastore = require('@google-cloud/datastore');
 // Creates a client
 const datastore = new Datastore();
 
-const PREDICTION_ASSETS = ["2", "8", "27"]; // BTC, ETH, LINK
+const PREDICTION_ASSETS = ["2", "1", "27"]; // BTC, ETH, LINK
 const ASSETS = ["BTC", "ETH", "LINK"];
 
 async function endPrizePeriod() {

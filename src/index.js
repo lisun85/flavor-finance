@@ -6,6 +6,13 @@ const asset = require('./asset');
 const path = require("path");
 const app = express();
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', "*");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
+
 app.use( bodyParser.json() );  // to support JSON-encoded bodies
 
 app.use('/static', express.static(path.join(__dirname, "../client/build/static")));
@@ -51,7 +58,7 @@ app.get('/api/updateAssetPrices', (req, res, next) => {
 
 app.get('/api/assetPrices', (req, res, next) => {
     asset.getAssetPrices().then(results => {
-      res.json({ results });
+      res.status(200).json({ results }).end();
     })
     .catch(next);
 });

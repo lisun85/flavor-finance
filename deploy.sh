@@ -13,5 +13,5 @@ cd ..
 echo "Deploying to Production"
 echo "gcloud -q app deploy --project $production_app  --stop-previous-version"
 gcloud -q app deploy --project $production_app  --stop-previous-version
-# echo "gcloud -q app deploy cron.yaml --project $production_app "
-# gcloud -q app deploy cron.yaml --project $production_app
+echo "gcloud -q app deploy cron.yaml --project $production_app "
+gcloud -q app deploy cron.yaml --project $production_app
