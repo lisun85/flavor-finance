@@ -10,6 +10,7 @@ import { UseWalletProvider } from 'use-wallet'
 import MobileMenu from 'components/MobileMenu'
 import TopBar from 'components/TopBar'
 
+import { AssetPricesProvider } from 'contexts/AssetPrices'
 import { BalancesProvider } from 'contexts/Balances'
 import { FarmingProvider } from 'contexts/Farming'
 import { MigrationProvider } from 'contexts/Migration'
@@ -84,11 +85,13 @@ const Providers: React.FC = ({ children }) => {
           <PricesProvider>
             <BalancesProvider>
               <FarmingProvider>
-                <MigrationProvider>
-                  <VestingProvider>
-                    {children}
-                  </VestingProvider>
-                </MigrationProvider>
+                <AssetPricesProvider>
+                  <MigrationProvider>
+                    <VestingProvider>
+                      {children}
+                    </VestingProvider>
+                  </MigrationProvider>
+                </AssetPricesProvider>
               </FarmingProvider>
             </BalancesProvider>
           </PricesProvider>

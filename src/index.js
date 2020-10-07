@@ -2,8 +2,16 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const account = require('./account');
+const asset = require('./asset');
 const path = require("path");
 const app = express();
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', "*");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 
 app.use( bodyParser.json() );  // to support JSON-encoded bodies
 
@@ -31,6 +39,28 @@ app.post('/api/account', (req, res, next) => {
 
 app.get('/api/test', (req, res, next) => {
     res.json({ 'message': 'hello world' });
+});
+
+app.get('/api/cyclePrizePeriod', (req, res, next) => {
+    asset.endPrizePeriod();
+    asset.startPrizePeriod().then(results => {
+      res.json({ results });
+    })
+    .catch(next);
+});
+
+app.get('/api/updateAssetPrices', (req, res, next) => {
+    asset.updateAssetPrices().then(results => {
+      res.json({ results });
+    })
+    .catch(next);
+});
+
+app.get('/api/assetPrices', (req, res, next) => {
+    asset.getAssetPrices().then(results => {
+      res.status(200).json({ results }).end();
+    })
+    .catch(next);
 });
 
 app.get("/", (req, res) => {

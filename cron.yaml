@@ -1,0 +1,9 @@
+cron:
+
+- description: update asset prices
+  url: /api/updateAssetPrices
+  schedule: every 10 minutes
+
+- description: cycle prize period
+  url: /api/cyclePrizePeriod
+  schedule: every day 00:00 # 5pm PT

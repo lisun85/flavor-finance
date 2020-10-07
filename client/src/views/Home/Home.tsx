@@ -10,6 +10,7 @@ import PageHeader from 'components/PageHeader'
 //import Split from 'components/Split'
 
 import useBalances from 'hooks/useBalances'
+import useAssetPrices from 'hooks/useAssetPrices'
 
 import CompetitionSwitch from './components/CompetitionSwitch'
 import MigrationNotice from './components/MigrationNotice'
@@ -38,15 +39,22 @@ const HomeInstructions = () => (
       <div><b>Step 3</b>: All interest earned during the week go to those who selected the winning asset.</div>
       <div>And if you lose, you lose only one week's interest and none of your principal.</div>
     </Instruction>
-    <Instruction style={{marginTop: 20}}>
-      <b>And a couple more things:</b>
-    </Instruction>
-    <Instruction>
-      <b>FLAVOR</b>: You'll accumulate FLAVOR tokens every week, whether you win or lose.
-    </Instruction>
-    <Instruction>
-      <b>Opting Out</b>: At any point, you can opt-out or opt-in to future competitions. Opting out means you'll earn interest at the normal rate without any withdrawal fees.
-    </Instruction>
+
+      {false && (
+          <React.Fragment>
+      <Instruction style={{marginTop: 20}}>
+        <b>And a couple more things:</b>
+      </Instruction>
+      <Instruction>
+        <b>FLAVOR</b>: You'll accumulate FLAVOR tokens every week, whether you win or lose.
+      </Instruction>
+      <Instruction>
+        <b>Opting Out</b>: At any point, you can opt-out or opt-in to future competitions. Opting out means you'll earn interest at the normal rate without any withdrawal fees.
+      </Instruction>
+      </React.Fragment>
+    )}
+
+
   </div>
 );
 
@@ -54,6 +62,8 @@ const Home: React.FC = () => {
   const { darkMode } = useTheme()
   const { FlavorV2Balance } = useBalances()
   const [competitionType, setCompetitionMode] = useState('current');
+
+
 
   return (
     <Page>
@@ -63,15 +73,11 @@ const Home: React.FC = () => {
         title="🌶️ &nbsp; A Spicy New Twist on Yield Farming &nbsp; 🌶️"
       />
       <Container>
-        <CompetitionSwitch
+        {false && (
+          <CompetitionSwitch
           competitionType={competitionType}
           setCompetitionMode={setCompetitionMode}
         />
-        {(FlavorV2Balance && FlavorV2Balance.toNumber() > 0) && (
-          <>
-            <MigrationNotice />
-            <Spacer />
-          </>
         )}
         {competitionType === 'current' && <CurrentCompetition /> }
         {competitionType === 'next' && <NextCompetition /> }
