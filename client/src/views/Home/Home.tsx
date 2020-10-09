@@ -30,14 +30,22 @@ const HomeInstructions = () => (
       <b>Here's how it works:</b>
     </Instruction>
     <Instruction>
-      <b>Step 1</b>: Deposit stablecoin funds to start earning interest.
+      <b>Step 1</b>: Choose an asset shown below that you think will increase in price. Deposit USDC and receive FLAVOR-USDC tokens for the selected asset.
     </Instruction>
     <Instruction>
-      <b>Step 2</b>: Select the crypto asset you think will have the largest price gain in the next week.
+      <b>Step 2</b>: Deposited USDC is routed into the yUSDC yEarn vault and earns interest.
     </Instruction>
     <Instruction>
-      <div><b>Step 3</b>: All interest earned during the week go to those who selected the winning asset.</div>
-      <div>And if you lose, you lose only one week's interest and none of your principal.</div>
+      <div><b>Step 3</b>:  Every day, interest earned is allocated to the FLAVOR-USDC token that has a corresponding asset with the largest relative daily price gain. Holders of this FLAVOR-USDC token receive an automatic increase in their token balance.</div>
+      </Instruction>
+    <Instruction style={{marginTop: 20}}>
+      <b>A chance of winning without the risk of losing</b>
+    </Instruction>
+    <Instruction>
+    <div>Whenever your selected asset does not win the daily prize period, you maintain your balance of the corresponding FLAVOR-USDC token.</div>
+      </Instruction>
+    <Instruction>
+    <div>FLAVOR-USDC tokens are always redeemable for an equal amount of USDC, and you will always be able to withdraw an equal or greater amount of USDC that you had deposited.</div>
     </Instruction>
 
       {false && (

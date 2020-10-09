@@ -10,6 +10,8 @@ var account = require('./account');
 
 var asset = require('./asset');
 
+var coinmarketcap = require('./lib/coinmarketcap');
+
 var path = require("path");
 
 var app = express();
@@ -65,6 +67,12 @@ app.get('/api/assetPrices', (req, res, next) => {
       results
     }).end();
   }).catch(next);
+});
+app.get("/about", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
+app.get("/about/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));

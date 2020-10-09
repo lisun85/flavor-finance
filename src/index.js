@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const account = require('./account');
 const asset = require('./asset');
+const coinmarketcap = require('./lib/coinmarketcap');
 const path = require("path");
 const app = express();
 
@@ -63,9 +64,23 @@ app.get('/api/assetPrices', (req, res, next) => {
     .catch(next);
 });
 
+app.get("/about", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
+
+app.get("/about/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
+
+app.get("/home", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
+
+
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {

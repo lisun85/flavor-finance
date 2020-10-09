@@ -11,9 +11,12 @@ import {
   Separator,
   Spacer,
 } from 'react-neu'
-
+import Label from 'components/Label'
+import Value from 'components/Value'
 import FancyValue from 'components/FancyValue'
+import TableFancyValue from 'components/TableFancyValue'
 import Split from 'components/Split'
+import DepositButton from './DepositButton'
 import styled from 'styled-components'
 import useAssetPrices from 'hooks/useAssetPrices'
 
@@ -27,8 +30,10 @@ const AssetPrice = styled.span`
 `;
 
 const AssetPercentChange = styled.span`
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: bold;
   padding-left: 10px;
+  padding-top:4px;
 `;
 
 const AssetPercentChangePositive = styled(AssetPercentChange)`
@@ -39,15 +44,31 @@ const AssetPercentChangeNegative = styled(AssetPercentChange)`
   color: red;
 `;
 
-
-const AssetPriceInfo = styled.div`
-  font-size: 12px;
-  text-align: center;
-  margin: 10px 0;
+const PriceValue = styled.span`
+  font-size: 22px;
+  font-weight: 700;
 `;
+
 
 const CardTitleWrapper = styled.div`
   font-weight: bold;
+`;
+
+const StartingPriceBox = styled(Box)`
+width: 130px;
+`;
+
+const LatestPriceBox = styled(Box)`
+width: 130px;
+`;
+
+const PercentChangeBox = styled(Box)`
+width: 130px;
+`;
+
+const DepositButtonBox = styled(Box)`
+width: 130px;
+margin-left: 0px;
 `;
 
 const ASSET_NAMES = {
@@ -61,21 +82,6 @@ const ASSET_ICONS = {
   "ETH": "Ξ",
   "LINK": "⬡"
 }
-
-/*
-getFullYear() - Returns the 4-digit year
-getMonth() - Returns a zero-based integer (0-11) representing the month of the year.
-getDate() - Returns the day of the month (1-31).
-getDay() - Returns the day of the week (0-6). 0 is Sunday, 6 is Saturday.
-getHours() - Returns the hour of the day (0-23).
-getMinutes() - Returns the minute (0-59).
-getSeconds() - Returns the second (0-59).
-getMilliseconds() - Returns the milliseconds (0-999).
-getTimezoneOffset() - Returns the number of minutes between the machine local time and UTC.
-
-
-
-*/
 
 const timeFormat = dt => (
   `${dt.getMonth()}/${dt.getDate()} ${dt.getHours()}:00`
@@ -127,6 +133,10 @@ const CurrentCompetition: React.FC = () => {
   }
   return (
     <Card>
+    <CardTitleWrapper>
+      <CardTitle text="Current Prize Period" />
+    </CardTitleWrapper>
+      <Spacer size="sm" />
       <CardContent>
         <Split>
           <FancyValue
@@ -149,37 +159,57 @@ const CurrentCompetition: React.FC = () => {
       <Box marginTop={4} marginHorizontal={4}>
         <Separator />
       </Box>
-      <AssetPriceInfo>
-        All price percent changes are calculated from the start time of <b>09:00 GMT, Monday October 5th</b>
-      </AssetPriceInfo>
       {assets.map(asset => (
         <Asset>
           <Split>
-            <FancyValue
+            <TableFancyValue
               icon={ASSET_ICONS[asset.asset]}
               label={ASSET_NAMES[asset.asset]}
               value={asset.asset}
             />
-            <Box flex={1}>
-              <AssetPrice>
-                {`${Math.round(asset.latestPrice * 100) / 100} USD`}
-                {asset.PercentChange >= 0
+            <Box
+            flex={3}
+            row
+            >
+              <StartingPriceBox
+                alignItems="center"
+                column
+              >
+                <Label text="Starting Price" />
+                <PriceValue>${Math.round(asset.prizePeriodStartPrice * 100) / 100}</PriceValue>
+              </StartingPriceBox>
+              <LatestPriceBox
+                alignItems="center"
+                column
+
+              >
+                <Label text="Current Price" />
+                <PriceValue>${Math.round(asset.latestPrice * 100) / 100}</PriceValue>
+              </LatestPriceBox>
+              <PercentChangeBox
+                alignItems="center"
+                column
+              >
+                <Label text="Change" />
+                {asset.percentChange >= 0
                   ? (
                     <AssetPercentChangePositive>
-                    {`(${Math.round(asset.percentChange * 100) / 100}%)`}
+                    {`${Math.round(asset.percentChange * 100) / 100}%`}
                   </AssetPercentChangePositive>
                 ) :
                 (
                   <AssetPercentChangeNegative>
-                  {`(${Math.round(asset.percentChange * 100) / 100}%)`}
+                  {`${Math.round(asset.percentChange * 100) / 100}%`}
                 </AssetPercentChangeNegative>
               )
                 }
-              </AssetPrice>
+              </PercentChangeBox>
+              <DepositButtonBox>
+                <DepositButton
+                  asset={asset.asset}
+                />
+              </DepositButtonBox>
             </Box>
-            <Box flex={1}>
-            </Box>
-
           </Split>
         </Asset>
         )

@@ -5,16 +5,17 @@ import styled from 'styled-components'
 import Label from 'components/Label'
 import Value from 'components/Value'
 
-interface FancyValueProps {
+interface TableFancyValueProps {
   icon: React.ReactNode,
   label: string,
   value: string,
 }
 
 const FancyBox = styled(Box)`
+  width: 110px;
 `;
 
-const FancyValue: React.FC<FancyValueProps> = ({
+const TableFancyValue: React.FC<TableFancyValueProps> = ({
   icon,
   label,
   value,
@@ -41,4 +42,4 @@ const StyledIcon = styled.span.attrs({ role: 'img' })`
   font-size: 32px;
 `
 
-export default FancyValue
+export default TableFancyValue

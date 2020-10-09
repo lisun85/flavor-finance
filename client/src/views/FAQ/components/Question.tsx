@@ -28,7 +28,7 @@ const Question: React.FC<QuestionProps> = ({
 
   return (
     <div ref={ref}>
-      <Box paddingVertical={4} marginVertical={3}>
+      <Box paddingVertical={4} marginVertical={2}>
         <Box alignItems="center" row>
           {active && (
             <>
@@ -36,7 +36,7 @@ const Question: React.FC<QuestionProps> = ({
               <Spacer size="sm" />
             </>
           )}
-          <StyledQuestionLink href={`https://Flavor.finance/faq/${slug}`}>{question}</StyledQuestionLink>
+          <StyledQuestionLink href={`/about/${slug}`}>{question}</StyledQuestionLink>
         </Box>
         <Spacer />
         {React.Children.map(children, (child, i) => (

@@ -10,22 +10,17 @@ exports.getAssetPrices = getAssetPrices;
 
 var _axios = _interopRequireDefault(require("axios"));
 
-var _psr = require("./utils/psr");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var tellor = require('./lib/tellor');
+var coinmarketcap = require('./lib/coinmarketcap');
 
-var Datastore = require('@google-cloud/datastore'); // Creates a client
-
+var Datastore = require('@google-cloud/datastore');
 
 var datastore = new Datastore();
-var PREDICTION_ASSETS = ["2", "1", "27"]; // BTC, ETH, LINK
-
 var ASSETS = ["BTC", "ETH", "LINK"];
 
 function endPrizePeriod() {
@@ -44,8 +39,7 @@ function startPrizePeriod() {
 
 function _startPrizePeriod() {
   _startPrizePeriod = _asyncToGenerator(function* () {
-    var priceResults = {};
-    yield tellor.loadTellorPrices(priceResults, PREDICTION_ASSETS);
+    var assetPrices = yield coinmarketcap.fetchAssetPrices(ASSETS);
     var entities = [];
     var assetDataResults = [];
     ASSETS.forEach((asset, index) => {
@@ -55,10 +49,10 @@ function _startPrizePeriod() {
         value: asset
       }, {
         name: 'prizePeriodStartPrice',
-        value: priceResults[asset + "/USD"]
+        value: assetPrices[asset]
       }, {
         name: 'latestPrice',
-        value: priceResults[asset + "/USD"]
+        value: assetPrices[asset]
       }, {
         name: 'percentChange',
         value: 0
@@ -105,12 +99,12 @@ function updateAssetPrices() {
 function _updateAssetPrices() {
   _updateAssetPrices = _asyncToGenerator(function* () {
     var assetEntities = yield _getAssetEntities();
-    var priceResults = {};
-    yield tellor.loadTellorPrices(priceResults, PREDICTION_ASSETS);
+    var assetPrices = yield coinmarketcap.fetchAssetPrices(ASSETS);
     var entities = [];
     var assetDataResults = [];
     assetEntities[0].forEach((assetEntity, index) => {
-      var latestPrice = priceResults[assetEntity.asset + "/USD"];
+      var latestPrice = assetPrices[assetEntity.asset];
+      console.log("latest price for ".concat(assetEntity.asset, " is ").concat(latestPrice));
       var assetKey = datastore.key(['AssetPrice', assetEntity.asset]);
       var assetData = [{
         name: 'asset',

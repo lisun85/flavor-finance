@@ -1,13 +1,9 @@
 import axios from "axios";
-import { PSRs } from "./utils/psr";
-const tellor = require('./lib/tellor');
+const coinmarketcap = require('./lib/coinmarketcap');
 const Datastore = require('@google-cloud/datastore');
 
-
-// Creates a client
 const datastore = new Datastore();
 
-const PREDICTION_ASSETS = ["2", "1", "27"]; // BTC, ETH, LINK
 const ASSETS = ["BTC", "ETH", "LINK"];
 
 async function endPrizePeriod() {
@@ -16,8 +12,7 @@ async function endPrizePeriod() {
 
 async function startPrizePeriod() {
 
-    const priceResults = {}
-    await tellor.loadTellorPrices(priceResults, PREDICTION_ASSETS);
+    const assetPrices = await coinmarketcap.fetchAssetPrices(ASSETS);
     const entities = [];
     const assetDataResults = [];
     ASSETS.forEach((asset, index) => {
@@ -30,11 +25,11 @@ async function startPrizePeriod() {
         },
         {
           name: 'prizePeriodStartPrice',
-          value: priceResults[asset + "/USD"],
+          value: assetPrices[asset],
         },
         {
           name: 'latestPrice',
-          value: priceResults[asset + "/USD"],
+          value: assetPrices[asset],
         },
         {
           name: 'percentChange',
@@ -76,14 +71,12 @@ function _percentChange(startPrice, latestPrice) {
 async function updateAssetPrices() {
 
     const assetEntities = await _getAssetEntities();
-    const priceResults = {}
-    await tellor.loadTellorPrices(priceResults, PREDICTION_ASSETS);
-
-
+    const assetPrices = await coinmarketcap.fetchAssetPrices(ASSETS);
     const entities = [];
     const assetDataResults = [];
     assetEntities[0].forEach((assetEntity, index) => {
-      const latestPrice = priceResults[assetEntity.asset + "/USD"];
+      const latestPrice = assetPrices[assetEntity.asset];
+      console.log(`latest price for ${assetEntity.asset} is ${latestPrice}`);
       const assetKey = datastore.key(['AssetPrice', assetEntity.asset]);
       const assetData = [
         {
