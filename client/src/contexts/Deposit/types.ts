@@ -13,7 +13,7 @@ export interface ContextValues {
   onApprove: () => void,
   onHarvest: () => void,
   onRedeem: () => void,
-  onStake: (amount: string) => void,
+  onStake: (amount: string, asset: string) => void,
   onUnstake: (amount: string) => void,
   stakedBalance?: BigNumber,
 }

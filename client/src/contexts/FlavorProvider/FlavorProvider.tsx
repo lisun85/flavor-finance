@@ -2,7 +2,8 @@ import React, { createContext, useEffect, useState } from 'react'
 
 import { useWallet } from 'use-wallet'
 
-import { Flavor } from 'flavor-sdk/lib'
+import { Flavor as FlavorSDK } from 'flavor-sdk/lib'
+import { NETWORKS } from 'flavor-sdk/lib/lib/constants';
 
 export interface FlavorContext {
   Flavor?: any
@@ -20,25 +21,24 @@ declare global {
 
 const FlavorProvider: React.FC = ({ children }) => {
   const { ethereum } = useWallet()
-  const [flavor, setFlavor] = useState<any>()
-
+  const [Flavor, setFlavor] = useState<any>()
+  const IS_TESTING = false
   useEffect(() => {
     if (ethereum) {
-      const FlavorLib = new Flavor(
+      const FlavorLib = new FlavorSDK(
         ethereum,
-        "1",
-        false, {
+        NETWORKS.KOVAN,
+        IS_TESTING, {
           defaultAccount: "",
           defaultConfirmations: 1,
           autoGasMultiplier: 1.5,
-          testing: false,
+          testing: IS_TESTING,
           defaultGas: "6000000",
           defaultGasPrice: "1000000000000",
           accounts: [],
           ethereumNodeTimeout: 10000
         }
       )
-
       setFlavor(FlavorLib)
       window.Flavorsauce = FlavorLib
     }

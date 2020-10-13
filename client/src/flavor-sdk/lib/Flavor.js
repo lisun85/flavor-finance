@@ -1,6 +1,9 @@
 import Web3 from 'web3';
 import BigNumber from 'bignumber.js'
 import {
+  Contracts
+} from './lib/contracts.js';
+import {
   Account
 } from './lib/accounts.js';
 import {
@@ -44,6 +47,7 @@ export class Flavor {
     if (options.defaultAccount) {
       this.web3.eth.defaultAccount = options.defaultAccount;
     }
+    this.contracts = new Contracts(realProvider, networkId, this.web3, options);
     this.accounts = [];
     this.markets = [];
     this.prices = {};
@@ -59,7 +63,7 @@ export class Flavor {
   }
 
   addAccount(address, number) {
-    //this.accounts.push(new Account(this.contracts, address, number));
+    this.accounts.push(new Account(this.contracts, address, number));
   }
 
   setProvider(
@@ -67,7 +71,7 @@ export class Flavor {
     networkId
   ) {
     this.web3.setProvider(provider);
-    //this.contracts.setProvider(provider, networkId);
+    this.contracts.setProvider(provider, networkId);
     this.operation.setNetworkId(networkId);
   }
 
@@ -75,7 +79,7 @@ export class Flavor {
     account
   ) {
     this.web3.eth.defaultAccount = account;
-    //this.contracts.setDefaultAccount(account);
+    this.contracts.setDefaultAccount(account);
   }
 
   getDefaultAccount() {

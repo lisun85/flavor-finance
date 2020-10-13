@@ -4,34 +4,45 @@ import { useWallet } from 'use-wallet'
 import { provider } from 'web3-core'
 
 import {
-  Flavorv2 as FlavorV2Address,
+  usdc as USDCAddress,
   Flavorv3 as FlavorV3Address,
+  FlavorTokens as FlavorTokenAddresses,
   yycrvUniLp as yyrcvUniLpAddress,
 } from 'constants/tokenAddresses'
 import { getBalance } from 'utils'
 
 import Context from './Context'
+import { FlavorTokenBalanceValues } from './types'
 
 const Provider: React.FC = ({ children }) => {
   const [FlavorV2Balance, setFlavorV2Balance] = useState<BigNumber>()
   const [FlavorV3Balance, setFlavorV3Balance] = useState<BigNumber>()
+  const [USDCBalance, setUSDCBalance] = useState<BigNumber>()
+  const [FlavorTokenBalances, setFlavorTokenBalances] = useState<FlavorTokenBalanceValues>({})
   const [yycrvUniLpBalance, setYycrvUniLpBalance] = useState<BigNumber>()
 
   const { account, ethereum }: { account: string | null, ethereum: provider } = useWallet()
 
   const fetchBalances = useCallback(async (userAddress: string, provider: provider) => {
     const balances = await Promise.all([
-      await getBalance(provider, FlavorV2Address, userAddress),
-      await getBalance(provider, FlavorV3Address, userAddress),
-      await getBalance(provider, yyrcvUniLpAddress, userAddress)
+      await getBalance(provider, USDCAddress, userAddress),
+      await getBalance(provider, FlavorTokenAddresses['BTC'], userAddress),
+      await getBalance(provider, FlavorTokenAddresses['ETH'], userAddress),
+      await getBalance(provider, FlavorTokenAddresses['LINK'], userAddress),
+      //await getBalance(provider, FlavorV3Address, userAddress),
+      //await getBalance(provider, yyrcvUniLpAddress, userAddress),
+
     ])
-    setFlavorV2Balance(new BigNumber(balances[0]).dividedBy(new BigNumber(10).pow(24)))
-    setFlavorV3Balance(new BigNumber(balances[1]).dividedBy(new BigNumber(10).pow(18)))
-    setYycrvUniLpBalance(new BigNumber(balances[2]).dividedBy(new BigNumber(10).pow(18)))
+    window.console.log('balances', balances);
+    setUSDCBalance(new BigNumber(balances[0]).dividedBy(new BigNumber(10).pow(6)))
+    setFlavorTokenBalances({
+      'BTC': new BigNumber(balances[1]).dividedBy(new BigNumber(10).pow(18)),
+      'ETH': new BigNumber(balances[2]).dividedBy(new BigNumber(10).pow(18)),
+      'LINK': new BigNumber(balances[3]).dividedBy(new BigNumber(10).pow(18)),
+    })
   }, [
-    setFlavorV2Balance,
-    setFlavorV3Balance,
-    setYycrvUniLpBalance
+    setUSDCBalance,
+    setFlavorTokenBalances,
   ])
 
   useEffect(() => {
@@ -58,8 +69,9 @@ const Provider: React.FC = ({ children }) => {
 
   return (
     <Context.Provider value={{
-      FlavorV2Balance,
+      USDCBalance,
       FlavorV3Balance,
+      FlavorTokenBalances,
       yycrvUniLpBalance,
     }}>
       {children}

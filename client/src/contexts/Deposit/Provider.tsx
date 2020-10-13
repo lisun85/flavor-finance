@@ -15,6 +15,12 @@ import {
   stake,
   unstake,
 } from 'flavor-sdk/utils'
+import {
+  FlavorTokens as FlavorTokenAddresses,
+} from 'constants/tokenAddresses'
+import {
+  deposit
+} from 'flavor-sdk/txUtils'
 
 import Context from './Context'
 
@@ -31,7 +37,7 @@ const Provider: React.FC = ({ children }) => {
   const [earnedBalance, setEarnedBalance] = useState<BigNumber>()
   const [stakedBalance, setStakedBalance] = useState<BigNumber>()
 
-  const Flavor = useFlavor()
+  const Flavor  = useFlavor()
   const { account } = useWallet()
 
   // TODO: REPLACE THESE
@@ -109,10 +115,12 @@ const Provider: React.FC = ({ children }) => {
     Flavor
   ])
 
-  const handleStake = useCallback(async (amount: string) => {
+  const handleStake = useCallback(async (asset: string, amount: string) => {
+    window.console.log('handleStake', asset, FlavorTokenAddresses, FlavorTokenAddresses[asset]);
     if (!Flavor) return
     setConfirmTxModalIsOpen(true)
-    await stake(Flavor, amount, account, () => {
+    await deposit(Flavor, FlavorTokenAddresses[asset],
+        amount, account, () => {
       setConfirmTxModalIsOpen(false)
       setIsStaking(true)
     })

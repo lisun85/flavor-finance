@@ -160,7 +160,7 @@ const CurrentCompetition: React.FC = () => {
         <Separator />
       </Box>
       {assets.map(asset => (
-        <Asset>
+        <Asset key={asset.asset}>
           <Split>
             <TableFancyValue
               icon={ASSET_ICONS[asset.asset]}

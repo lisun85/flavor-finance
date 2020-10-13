@@ -40,7 +40,8 @@ const FAQ: React.FC = () => {
               slug="Flavor-protocol"
             >
               <span>Flavor is a decentralized app that combines a simple prediction market mechanic with high-yield interest earning. The result is an easy way to bet on crypto assets with minimal risk. </span>
-              <span>It is built on a custom <a href="https://docs.pooltogether.com/protocol/overview" target="_blank">PoolTogether</a> prize strategy for allocating prize earnings, <a href="https://chain.link" target="_blank">Chainlink</a> price feeds for determining winners, and the <a href="https://yearn.finance/vaults" target="_blank">yUSDC yVault</a> for earning interest on USDC deposits.</span>
+              <span>It's easy - just swap USDC for "flavored USDC" tokens that increase in balance when you win. </span>
+              <span>Flavor is built on a custom <a href="https://docs.pooltogether.com/protocol/overview" target="_blank">PoolTogether</a> prize strategy for allocating prize earnings, <a href="https://chain.link" target="_blank">Chainlink</a> price feeds for determining winners, and the <a href="https://yearn.finance/vaults" target="_blank">yUSDC yVault</a> for earning interest on USDC funds.</span>
             </Question>
             <Question
               active={activeSlug === "work"}
@@ -55,10 +56,10 @@ const FAQ: React.FC = () => {
             </Question>
             <Question
               active={activeSlug === "Flavor-token"}
-              question="What are FLAVOR-USDC tokens?"
+              question='What is "Flavored USDC"?'
               slug="Flavor-usdc-token"
             >
-              <span>FLAVOR-USDC tokens are minted and added to your wallet whenever you make a deposit to a Flavor pod contract.</span>
+              <span>Flavored USDC (FLAVOR-USDC) stablecoin tokens are minted and added to your wallet whenever you make a deposit to a Flavor pod contract. Each flavored token indicates the underlying stablecoin (USDC) and the associated prediction market asset.</span>
               <span>For example, if you deposit to the Bitcoin/BTC pod contract (and are betting on BTC/USD's relative price performance compared to other supported crypto asseets), you will receive <i>FLAVOR-USDC-BTC</i> tokens once you have deposited USDC.</span>
               <span>Your balance of FLAVOR-USDC tokens are always equivelent to the amount of USDC that you can redeem from the corresponding pod. If you have 100 <i>FLAVOR-USDC-BTC</i> tokens, they can then be used to withdraw 100 USDC tokens from the pod contract.</span>
               <span>When each daily supply rebase occurs, your balance of FLAVOR-USDC tokens will either remain the same or increase if your selected asset won the daily prize period. Because Flavor is "no-loss" and the only thing at stake is earned interest via yUSDC vaults, negative rebases will not occur and you'll always be able to redeem FLAVOR-USDC tokens for at least the amount of USDC that you had deposited.</span>

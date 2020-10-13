@@ -19,8 +19,8 @@ import {
 import TokenInput from 'components/TokenInput'
 import FancyValue from 'components/FancyValue'
 import Split from 'components/Split'
-
 import useBalances from 'hooks/useBalances'
+import useDeposit from 'hooks/useDeposit'
 
 interface DepositModalProps {
   asset: string
@@ -36,8 +36,8 @@ const DepositModal: React.FC<DepositModalProps> = ({
 
   const { reset } = useWallet()
   const {
-    FlavorV2Balance,
-    FlavorV3Balance
+    USDCBalance,
+    FlavorTokenBalances
   } = useBalances()
 
   const [currentView, setCurrentView] = useState('overview')
@@ -65,46 +65,62 @@ const DepositModal: React.FC<DepositModalProps> = ({
     setCurrentView('overview')
   }, [setCurrentView])
 
-  const usdcBalance = getDisplayBalance(FlavorV3Balance)
-  const usdcSymbolIcon = usdcBalance == '0.00'
+
+  const usdcBalance = USDCBalance !== undefined
+    ? USDCBalance
+    : new BigNumber(0)
+  const usdcDisplayBalance = getDisplayBalance(usdcBalance)
+  const usdcSymbolIcon = usdcDisplayBalance == '0.00'
   ? <span role="img" style={{ opacity: 0.5 }} >💵</span>
   : <span role="img">💵</span>
 
-  const flavoredAssetSymbol = `FLAVOR-USDC-${asset}`
-  const flavoredAssetBalance = getDisplayBalance(FlavorV2Balance)
-  const flavoredAssetSymbolIcon = flavoredAssetBalance == '0.00'
+  const flavoredAssetBalance =  FlavorTokenBalances && FlavorTokenBalances[asset] !== undefined
+    ? FlavorTokenBalances[asset]
+    : new BigNumber(0)
+  const flavoredAssetDisplayBalance = getDisplayBalance(flavoredAssetBalance)
+  const flavoredAssetSymbolIcon = flavoredAssetDisplayBalance == '0.00'
     ? <span role="img" style={{ opacity: 0.5 }} >🌶️</span>
     : <span role="img">🌶️</span>
 
 
   const depositModalOverview = (
     <>
-      <ModalTitle text={flavoredAssetSymbol} />
+      <ModalTitle text={flavoredAssetSymbol(asset)} />
         <ModalContent>
           <Split>
+          <Box column>
             <Box row>
               <FancyValue
                 icon={usdcSymbolIcon}
                 label="USDC balance"
-                value={usdcBalance}
-              />
-              <Button
-                onClick={onClickDeposit}
-                text="Deposit"
-                variant="secondary"
+                value={usdcDisplayBalance}
               />
             </Box>
+            <Spacer />
+            <Box row>
+              <Button
+                onClick={onClickDeposit}
+                text={`Swap USDC for ${flavoredAssetSymbol(asset)}`}
+                size="sm"
+              />
+            </Box>
+            </Box>
+            <Box column>
             <Box row>
               <FancyValue
                 icon={flavoredAssetSymbolIcon}
-                label={`${flavoredAssetSymbol} balance`}
-                value={flavoredAssetBalance}
+                label={`${flavoredAssetSymbol(asset)} balance`}
+                value={flavoredAssetDisplayBalance}
               />
+           </Box>
+           <Spacer />
+           <Box row>
               <Button
                 onClick={onClickWithdraw}
-                text="Withdraw"
-                variant="secondary"
+                text={`Swap ${flavoredAssetSymbol(asset)} for USDC`}
+                size="sm"
               />
+            </Box>
             </Box>
           </Split>
           <Spacer />
@@ -127,13 +143,15 @@ const DepositModal: React.FC<DepositModalProps> = ({
       {currentView === 'overview' && depositModalOverview}
       {currentView === 'deposit' && (
         <Deposit
-          flavoredAssetSymbol={flavoredAssetSymbol}
+          asset={asset}
+          assetBalance={usdcBalance}
           onBack={onBack}
         />
       )}
       {currentView === 'withdraw' && (
         <Withdraw
-          flavoredAssetSymbol={flavoredAssetSymbol}
+          asset={asset}
+          assetBalance={flavoredAssetBalance}
           onBack={onBack}
         />
       )}
@@ -141,40 +159,47 @@ const DepositModal: React.FC<DepositModalProps> = ({
   )
 }
 
-
 interface DepositProps {
-  flavoredAssetSymbol: string
-  onBack: () => void,
+  asset: string,
+  assetBalance: BigNumber,
+  onBack: () => void
 }
 
 const Deposit: React.FC<DepositProps> = ({
-  flavoredAssetSymbol,
+  asset,
+  assetBalance,
   onBack
 }) => {
 
   const [val, setVal] = useState('')
-  const fullBalance = '0'
+  const fullBalance = assetBalance
+
+  const {
+    onStake,
+    isStaking
+  } = useDeposit()
+
   const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     setVal(e.currentTarget.value)
   }, [setVal])
 
   const handleSelectMax = useCallback(() => {
-    setVal(fullBalance)
+    setVal(fullBalance.toString())
   }, [fullBalance, setVal])
 
   const handleDeposit = useCallback(() => {
-    window.console.log('handleDeposit', val)
-  }, [val])
+    onStake(asset, val)
+  }, [onStake, val, asset])
 
   return (
     <>
-      <ModalTitle text={`Exchange USDC for ${flavoredAssetSymbol}`} />
+      <ModalTitle text={`Swap USDC for ${flavoredAssetSymbol(asset)}`} />
         <ModalContent>
         <TokenInput
           value={val}
           onSelectMax={handleSelectMax}
           onChange={handleChange}
-          max={fullBalance}
+          max={fullBalance.toString()}
           symbol={'USDC'}
         />
         </ModalContent>
@@ -196,18 +221,19 @@ const Deposit: React.FC<DepositProps> = ({
 
 
 const Withdraw: React.FC<DepositProps> = ({
-  flavoredAssetSymbol,
+  asset,
+  assetBalance,
   onBack
 }) => {
 
   const [val, setVal] = useState('')
-  const fullBalance = '0'
+  const fullBalance = assetBalance
   const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     setVal(e.currentTarget.value)
   }, [setVal])
 
   const handleSelectMax = useCallback(() => {
-    setVal(fullBalance)
+    setVal(fullBalance.toString())
   }, [fullBalance, setVal])
 
   const handleWithdraw = useCallback(() => {
@@ -216,14 +242,14 @@ const Withdraw: React.FC<DepositProps> = ({
 
   return (
     <>
-      <ModalTitle text={`Exchange ${flavoredAssetSymbol} for USDC`} />
+      <ModalTitle text={`Swap ${flavoredAssetSymbol(asset)} for USDC`} />
         <ModalContent>
         <TokenInput
           value={val}
           onSelectMax={handleSelectMax}
           onChange={handleChange}
-          max={fullBalance}
-          symbol={flavoredAssetSymbol}
+          max={fullBalance.toString()}
+          symbol={flavoredAssetSymbol(asset)}
         />
         </ModalContent>
         <Separator />
@@ -241,6 +267,8 @@ const Withdraw: React.FC<DepositProps> = ({
       </>
   )
 }
+
+const flavoredAssetSymbol = asset => (`FLAVOR-USDC-${asset}`);
 
 
 export default DepositModal
