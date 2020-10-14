@@ -23,6 +23,7 @@ import useLocalStorage from 'hooks/useLocalStorage'
 
 import Farm from 'views/Farm'
 import FAQ from 'views/FAQ'
+import History from 'views/History'
 import Home from 'views/Home'
 import Funds from 'views/Funds'
 
@@ -49,14 +50,17 @@ const App: React.FC = () => {
           <Route exact path="/farm">
             <Farm />
           </Route>
-          <Route path="/">
-            <FAQ />
-          </Route>
           <Route path="/about">
             <FAQ />
           </Route>
+          <Route path="/history">
+            <History />
+          </Route>
           <Route exact path="/funds">
             <Funds />
+          </Route>
+          <Route path="/">
+            <FAQ />
           </Route>
         </Switch>
       </Providers>

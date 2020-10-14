@@ -50,6 +50,20 @@ app.get('/api/cyclePrizePeriod', (req, res, next) => {
     .catch(next);
 });
 
+app.get('/api/calculateWinner', (req, res, next) => {
+    asset.calculateWinner().then(results => {
+      res.json({ results });
+    })
+    .catch(next);
+});
+
+app.get('/api/history', (req, res, next) => {
+    asset.getHistory().then(results => {
+      res.json({ results });
+    })
+    .catch(next);
+});
+
 app.get('/api/updateAssetPrices', (req, res, next) => {
     asset.updateAssetPrices().then(results => {
       res.json({ results });

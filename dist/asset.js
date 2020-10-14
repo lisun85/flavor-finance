@@ -7,6 +7,8 @@ exports.startPrizePeriod = startPrizePeriod;
 exports.endPrizePeriod = endPrizePeriod;
 exports.updateAssetPrices = updateAssetPrices;
 exports.getAssetPrices = getAssetPrices;
+exports.calculateWinner = calculateWinner;
+exports.getHistory = getHistory;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -28,9 +30,90 @@ function endPrizePeriod() {
 }
 
 function _endPrizePeriod() {
-  _endPrizePeriod = _asyncToGenerator(function* () {// TODO: call completeAward method on prize strategy contract
+  _endPrizePeriod = _asyncToGenerator(function* () {
+    // TODO: call completeAward method on prize strategy contract
+    //await completeAward();
+    var winner = yield calculateWinner();
+    saveWinner(winner); // TODO: replace this with event so it will always be onchain result
   });
   return _endPrizePeriod.apply(this, arguments);
+}
+
+function completeAward() {
+  return _completeAward.apply(this, arguments);
+}
+
+function _completeAward() {
+  _completeAward = _asyncToGenerator(function* () {
+    var podContract = web3interface.getPodContract();
+    podContract.methods.completeAward().send({
+      from: process.env.ETH_SIGNING_ACCOUNT,
+      gas: '1500000'
+    }, /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator(function* (error, txHash) {
+        if (error) {
+          //onTxHash && onTxHash('')
+          console.log("Depositing error", error);
+          return false;
+        }
+      });
+
+      return function (_x2, _x3) {
+        return _ref.apply(this, arguments);
+      };
+    }());
+  });
+  return _completeAward.apply(this, arguments);
+}
+
+function calculateWinner() {
+  return _calculateWinner.apply(this, arguments);
+}
+
+function _calculateWinner() {
+  _calculateWinner = _asyncToGenerator(function* () {
+    var [assetPrices] = yield datastore.runQuery(datastore.createQuery('AssetPrice'));
+    assetPrices.sort((a, b) => b.percentChange - a.percentChange);
+    var winner = assetPrices[0];
+    console.log('winner', winner);
+    return winner;
+  });
+  return _calculateWinner.apply(this, arguments);
+}
+
+function saveWinner(_x) {
+  return _saveWinner.apply(this, arguments);
+}
+
+function _saveWinner() {
+  _saveWinner = _asyncToGenerator(function* (winner) {
+    var today = new Date().toISOString().slice(0, 10);
+    var winnerKey = datastore.key(['PrizePeriodHistory', today]);
+    var entity = {
+      key: winnerKey,
+      data: [{
+        name: 'date',
+        value: today
+      }, {
+        name: 'asset',
+        value: winner.asset
+      }, {
+        name: 'prizePeriodStartPrice',
+        value: winner.prizePeriodStartPrice
+      }, {
+        name: 'latestPrice',
+        value: winner.latestPrice
+      }, {
+        name: 'percentChange',
+        value: winner.percentChange
+      }]
+    };
+    yield datastore.save(entity);
+    return {
+      winner
+    };
+  });
+  return _saveWinner.apply(this, arguments);
 }
 
 function startPrizePeriod() {
@@ -141,8 +224,21 @@ function getAssetPrices() {
 function _getAssetPrices() {
   _getAssetPrices = _asyncToGenerator(function* () {
     var [assetPrices] = yield datastore.runQuery(datastore.createQuery('AssetPrice'));
+    assetPrices.sort((a, b) => b.percentChange - a.percentChange);
     return assetPrices;
   });
   return _getAssetPrices.apply(this, arguments);
+}
+
+function getHistory() {
+  return _getHistory.apply(this, arguments);
+}
+
+function _getHistory() {
+  _getHistory = _asyncToGenerator(function* () {
+    var [historyRecords] = yield datastore.runQuery(datastore.createQuery('PrizePeriodHistory'));
+    return historyRecords;
+  });
+  return _getHistory.apply(this, arguments);
 }
 //# sourceMappingURL=asset.js.map

@@ -8,7 +8,70 @@ const ASSETS = ["BTC", "ETH", "LINK"];
 
 async function endPrizePeriod() {
   // TODO: call completeAward method on prize strategy contract
+  //await completeAward();
+  const winner = await calculateWinner();
+  saveWinner(winner);
+
+  // TODO: replace this with event so it will always be onchain result
 }
+
+async function completeAward() {
+  const podContract = web3interface.getPodContract();
+  podContract.methods.completeAward()
+  .send({ from: process.env.ETH_SIGNING_ACCOUNT, gas: '1500000' }, async (error, txHash) => {
+    if (error) {
+        //onTxHash && onTxHash('')
+        console.log("Depositing error", error)
+        return false
+    }
+  });
+
+}
+async function calculateWinner() {
+  const [assetPrices] = await datastore.runQuery(
+    datastore.createQuery('AssetPrice')
+  );
+
+  assetPrices.sort((a, b) => b.percentChange - a.percentChange);
+  const winner = assetPrices[0];
+  console.log('winner', winner);
+  return winner;
+}
+
+async function saveWinner(winner){
+  const today = new Date().toISOString().slice(0, 10);
+  const winnerKey = datastore.key(['PrizePeriodHistory', today]);
+  const entity = {
+    key: winnerKey,
+    data: [
+      {
+        name: 'date',
+        value: today,
+      },
+      {
+        name: 'asset',
+        value: winner.asset,
+      },
+      {
+        name: 'prizePeriodStartPrice',
+        value: winner.prizePeriodStartPrice,
+      },
+      {
+        name: 'latestPrice',
+        value: winner.latestPrice,
+      },
+      {
+        name: 'percentChange',
+        value: winner.percentChange,
+      },
+    ],
+  };
+  await datastore.save(entity);
+  return {
+    winner
+  }
+}
+
 
 async function startPrizePeriod() {
 
@@ -117,10 +180,20 @@ async function getAssetPrices() {
   const [assetPrices] = await datastore.runQuery(
     datastore.createQuery('AssetPrice')
   );
+  assetPrices.sort((a, b) => b.percentChange - a.percentChange);
   return assetPrices;
 }
 
 
+
+async function getHistory() {
+  const [historyRecords] = await datastore.runQuery(
+    datastore.createQuery('PrizePeriodHistory')
+  );
+  return historyRecords;
+}
+
+
  export {
-     startPrizePeriod, endPrizePeriod, updateAssetPrices, getAssetPrices
+     startPrizePeriod, endPrizePeriod, updateAssetPrices, getAssetPrices, calculateWinner, getHistory
  };

@@ -3,8 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.nextNonce = nextNonce;
-exports.ExampleContractInstance = exports.ExampleContractAddress = exports.getExampleContract = exports.signingAccount = exports.web3 = void 0;
+exports.getPodContract = void 0;
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -12,39 +11,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var Web3 = require('web3');
 
-var web3 = new Web3('https://ropsten.infura.io/v3/' + process.env.INFURA_KEY);
-exports.web3 = web3;
-var signingAccount = web3.eth.accounts.privateKeyToAccount('0x' + '8da4ef21b864d2cc526dbdb2a120bd2874c36c9d0a1fb7f8c63d7f7a8b41de8f'); //process.env.ETH_PRIVATE_KEY);
-
-exports.signingAccount = signingAccount;
-
 var fs = require('fs');
-
-var ExampleContractAddress = '0x...';
-exports.ExampleContractAddress = ExampleContractAddress;
-var ExampleContract = null; //JSON.parse(fs.readFileSync('./contracts/ExampleContract.json', 'utf8'));
-
-var ExampleContractABI = null; //ExampleContract['abi'];
 
 var transactionCount = -1;
 
-var getExampleContract = function getExampleContract(contractAddress) {
-  return new web3.eth.Contract(ExampleContractABI, contractAddress, {
+var getPodContract = function getPodContract() {
+  var signingAccount = web3.eth.accounts.privateKeyToAccount('0x' + process.env.ETH_PRIVATE_KEY);
+  var web3 = new Web3('https://ropsten.infura.io/v3/' + process.env.INFURA_KEY);
+  var PodContractAddress = '0x...';
+  var PodContract = JSON.parse(fs.readFileSync('./contracts/FlavorPod.json', 'utf8'));
+  var PodContractABI = PodContract['abi'];
+  return new web3.eth.Contract(PodContractABI, PodContractAddress, {
     from: signingAccount.address,
     gas: '1500000',
     gasPrice: 20000000000
   });
 };
 
-exports.getExampleContract = getExampleContract;
-var ExampleContractInstance = null; // const ExampleContractInstance = new web3.eth.Contract(ExampleContractABI, ExampleContractAddress,
-// 	{
-// 		from: signingAccount.address,
-// 		gas: '1500000',
-// 		gasPrice: 20000000000,
-// 	});
-
-exports.ExampleContractInstance = ExampleContractInstance;
+exports.getPodContract = getPodContract;
 
 function nextNonce() {
   return _nextNonce.apply(this, arguments);

@@ -27,7 +27,7 @@ const FlavorProvider: React.FC = ({ children }) => {
     if (ethereum) {
       const FlavorLib = new FlavorSDK(
         ethereum,
-        NETWORKS.KOVAN,
+        NETWORKS.ROPSTEN,
         IS_TESTING, {
           defaultAccount: "",
           defaultConfirmations: 1,
