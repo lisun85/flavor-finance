@@ -188,7 +188,9 @@ async function getAssetPrices() {
 
 async function getHistory() {
   const [historyRecords] = await datastore.runQuery(
-    datastore.createQuery('PrizePeriodHistory')
+    datastore.createQuery('PrizePeriodHistory').order('date', {
+        descending: true,
+    })
   );
   return historyRecords;
 }
