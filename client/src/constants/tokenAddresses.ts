@@ -9,5 +9,5 @@ export const migrator = '0x72cfed9293cbfb2bfc7515c413048c697c6c811c'
 export const FlavorTokens = {
   'BTC': '0x9191Fd9f29cbbE73bA0e1B8959eC89Bc780e598b',
   'ETH': '0x9191Fd9f29cbbE73bA0e1B8959eC89Bc780e598b',
-  'LINK': '0x9191Fd9f29cbbE73bA0e1B8959eC89Bc780e598b'
+  'SDEFI': '0x9191Fd9f29cbbE73bA0e1B8959eC89Bc780e598b'
 }

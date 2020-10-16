@@ -188,7 +188,6 @@ const Deposit: React.FC<DepositProps> = ({
   }, [fullBalance, setVal])
 
   const handleDeposit = useCallback(() => {
-    window.console.log(val);
     onDeposit(asset, val)
   }, [onDeposit, val, asset])
 
@@ -230,6 +229,11 @@ const Withdraw: React.FC<DepositProps> = ({
 
   const [val, setVal] = useState('')
   const fullBalance = assetBalance
+
+  const {
+    onWithdraw
+  } = useDeposit()
+
   const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     setVal(e.currentTarget.value)
   }, [setVal])
@@ -239,8 +243,8 @@ const Withdraw: React.FC<DepositProps> = ({
   }, [fullBalance, setVal])
 
   const handleWithdraw = useCallback(() => {
-    window.console.log('handleWithdraw', val);
-  }, [val])
+    onWithdraw(asset, val)
+  }, [onWithdraw, val, asset])
 
   return (
     <>

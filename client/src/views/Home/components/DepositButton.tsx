@@ -31,7 +31,6 @@ const DepositButton: React.FC<DepositButtonProps> = ({
   const { status } = useWallet()
   const {
     countdown,
-    farmingStartTime,
     isApproved,
     isApproving,
     isStaking,

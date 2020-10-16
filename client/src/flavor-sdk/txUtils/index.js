@@ -58,8 +58,46 @@ export const deposit = async (
     .times(new BigNumber(10).pow(6))
     .toString();
 
+  window.console.log('depositing amount', amount, 'usdc amount', usdcAmount);
+
   return flavorPodContract.methods
         .deposit(account, usdcAmount)
+        .send({ from: account, gas }, async (error, txHash) => {
+          if (error) {
+            onTxHash && onTxHash("");
+            console.log("Depositing error", error);
+            return false;
+          }
+          onTxHash && onTxHash(txHash);
+          const status = await waitTransaction(Flavor.web3.eth, txHash);
+          if (!status) {
+            console.log("Depositing transaction failed.");
+            return false;
+          }
+          return true;
+        });
+};
+
+export const withdraw = async (
+  Flavor,
+  podContractAddress,
+  amount,
+  account,
+  onTxHash
+) => {
+  const flavorPodContract = Flavor.contracts.flavorPod; // TODO: change to flavorPod
+  flavorPodContract.options.address = podContractAddress;
+  window.console.log("set pod contract address to ", podContractAddress);
+  const gas = GAS_LIMIT.DEPOSITING.DEFAULT;
+
+  const usdcAmount = new BigNumber(amount)
+    .times(new BigNumber(10).pow(6))
+    .toString();
+
+  window.console.log('withdrawing amount', amount, 'usdc amount', usdcAmount);
+
+  return flavorPodContract.methods
+        .withdrawAndRedeemCollateral(usdcAmount)
         .send({ from: account, gas }, async (error, txHash) => {
           if (error) {
             onTxHash && onTxHash("");

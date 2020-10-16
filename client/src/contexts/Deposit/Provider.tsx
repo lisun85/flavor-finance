@@ -20,7 +20,8 @@ import {
   FlavorTokens as FlavorTokenAddresses,
 } from 'constants/tokenAddresses'
 import {
-  deposit
+  deposit,
+  withdraw
 } from 'flavor-sdk/txUtils'
 
 import Context from './Context'
@@ -33,6 +34,8 @@ const Provider: React.FC = ({ children }) => {
   const [isHarvesting, setIsHarvesting] = useState(false)
   const [isRedeeming, setIsRedeeming] = useState(false)
   const [isStaking, setIsStaking] = useState(false)
+  const [isDepositing, setIsDepositing] = useState(false)
+  const [isWithdrawing, setIsWithdrawing] = useState(false)
   const [isUnstaking, setIsUnstaking] = useState(false)
 
   const [earnedBalance, setEarnedBalance] = useState<BigNumber>()
@@ -126,13 +129,35 @@ const Provider: React.FC = ({ children }) => {
     await deposit(Flavor, assetAddress,
         amount, account, () => {
       setConfirmTxModalIsOpen(false)
-      setIsStaking(true)
+      setIsDepositing(true)
     })
-    setIsStaking(false)
+    setIsDepositing(false)
   }, [
     account,
     setConfirmTxModalIsOpen,
-    setIsStaking,
+    setIsDepositing,
+    Flavor
+  ])
+
+
+  const handleWithdraw = useCallback(async (asset: string, amount: string) => {
+    if (!Flavor) return
+    const assetAddress = FlavorTokenAddresses[asset]
+    setConfirmTxModalIsOpen(true)
+    // if (!isApproved){
+    //   await onApprove(assetAddress);
+    //   window.console.log('approved!', isApproved);
+    // }
+    await withdraw(Flavor, assetAddress,
+        amount, account, () => {
+      setConfirmTxModalIsOpen(false)
+      setIsWithdrawing(true)
+    })
+    setIsWithdrawing(false)
+  }, [
+    account,
+    setConfirmTxModalIsOpen,
+    setIsWithdrawing,
     Flavor
   ])
 
@@ -164,7 +189,6 @@ const Provider: React.FC = ({ children }) => {
 
   return (
     <Context.Provider value={{
-      farmingStartTime,
       countdown,
       earnedBalance,
       isApproved,
@@ -173,11 +197,13 @@ const Provider: React.FC = ({ children }) => {
       isRedeeming,
       isStaking,
       isUnstaking,
-
+      isDepositing,
+      isWithdrawing,
       onApprove: handleApprove,
       onHarvest: handleHarvest,
       onRedeem: handleRedeem,
       onDeposit: handleDeposit,
+      onWithdraw: handleWithdraw,
       onUnstake: handleUnstake,
       stakedBalance,
     }}>
