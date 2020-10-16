@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { useWallet } from 'use-wallet'
 
 import ConfirmTransactionModal from 'components/ConfirmTransactionModal'
-import useApproval from 'hooks/useApproval'
+import useDepositApproval from 'hooks/useDepositApproval'
 import useFlavor from 'hooks/useFlavor'
 
 import {
@@ -16,6 +16,7 @@ import {
   unstake,
 } from 'flavor-sdk/utils'
 import {
+  usdc as USDCAddress,
   FlavorTokens as FlavorTokenAddresses,
 } from 'constants/tokenAddresses'
 import {
@@ -43,9 +44,8 @@ const Provider: React.FC = ({ children }) => {
   // TODO: REPLACE THESE
   const flavorUniLpAddress = '';
   const flavorPoolAddress = '';//Flavor ? Flavor.contracts.flavor_pool.options.address : ''
-  const { isApproved, isApproving, onApprove } = useApproval(
-    flavorUniLpAddress,
-    flavorPoolAddress,
+  const { isApproved, isApproving, onApprove } = useDepositApproval(
+    USDCAddress,
     () => setConfirmTxModalIsOpen(false)
   )
 
@@ -79,7 +79,6 @@ const Provider: React.FC = ({ children }) => {
 
   const handleApprove = useCallback(() => {
     setConfirmTxModalIsOpen(true)
-    onApprove()
   }, [
     onApprove,
     setConfirmTxModalIsOpen,
@@ -115,11 +114,16 @@ const Provider: React.FC = ({ children }) => {
     Flavor
   ])
 
-  const handleStake = useCallback(async (asset: string, amount: string) => {
-    window.console.log('handleStake', asset, FlavorTokenAddresses, FlavorTokenAddresses[asset]);
+
+  const handleDeposit = useCallback(async (asset: string, amount: string) => {
     if (!Flavor) return
+    const assetAddress = FlavorTokenAddresses[asset]
     setConfirmTxModalIsOpen(true)
-    await deposit(Flavor, FlavorTokenAddresses[asset],
+    if (!isApproved){
+      await onApprove(assetAddress);
+      window.console.log('approved!', isApproved);
+    }
+    await deposit(Flavor, assetAddress,
         amount, account, () => {
       setConfirmTxModalIsOpen(false)
       setIsStaking(true)
@@ -169,10 +173,11 @@ const Provider: React.FC = ({ children }) => {
       isRedeeming,
       isStaking,
       isUnstaking,
+
       onApprove: handleApprove,
       onHarvest: handleHarvest,
       onRedeem: handleRedeem,
-      onStake: handleStake,
+      onDeposit: handleDeposit,
       onUnstake: handleUnstake,
       stakedBalance,
     }}>

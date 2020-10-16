@@ -23,7 +23,7 @@ var coinmarketcap = require('./lib/coinmarketcap');
 var Datastore = require('@google-cloud/datastore');
 
 var datastore = new Datastore();
-var ASSETS = ["BTC", "ETH", "LINK"];
+var ASSETS = ["BTC", "ETH", "SDEFI"];
 
 function endPrizePeriod() {
   return _endPrizePeriod.apply(this, arguments);
@@ -225,7 +225,7 @@ function _getAssetPrices() {
   _getAssetPrices = _asyncToGenerator(function* () {
     var [assetPrices] = yield datastore.runQuery(datastore.createQuery('AssetPrice'));
     assetPrices.sort((a, b) => b.percentChange - a.percentChange);
-    return assetPrices;
+    return assetPrices.filter(asset => ASSETS.includes(asset.asset));
   });
   return _getAssetPrices.apply(this, arguments);
 }

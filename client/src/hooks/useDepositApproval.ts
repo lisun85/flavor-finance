@@ -3,32 +3,36 @@ import { useCallback, useState, useEffect } from 'react'
 import { useWallet } from 'use-wallet'
 import { provider } from 'web3-core'
 
-import { approve } from 'utils'
+import {
+  approve,
+} from 'flavor-sdk/txUtils'
+import useFlavor from 'hooks/useFlavor'
+import useDepositAllowance from './useDepositAllowance'
 
-import useAllowance from './useAllowance'
-
-const useApproval = (
+const useDepositApproval = (
   tokenAddress?: string,
-  spenderAddress?: string,
   onTxHash?: (txHash: string) => void,
 ) => {
-  const allowance = useAllowance(tokenAddress, spenderAddress)
+
   const [isApproving, setIsApproving] = useState(false)
   const [isApproved, setIsApproved] = useState(false)
 
   const { account, ethereum }: { account: string | null, ethereum?: provider} = useWallet()
+  const allowance = useDepositAllowance(tokenAddress);
+  const Flavor  = useFlavor()
 
-  const handleApprove = useCallback(async () => {
+  const handleApprove = useCallback(async (spenderAddress: string) => {
     if (!ethereum || !account || !spenderAddress || !tokenAddress) {
       return
     }
+    allowance.setSpenderAddress(spenderAddress);
     try {
       setIsApproving(true)
       const result = await approve(
-        account,
+        Flavor,
         spenderAddress,
         tokenAddress,
-        ethereum,
+        account,
         onTxHash,
       )
       setIsApproved(result)
@@ -43,12 +47,11 @@ const useApproval = (
     onTxHash,
     setIsApproved,
     setIsApproving,
-    spenderAddress,
     tokenAddress,
   ])
 
   useEffect(() => {
-    if (!!allowance?.toNumber()) {
+    if (!!allowance.allowance?.toNumber()) {
       setIsApproved(true)
     }
   }, [
@@ -63,4 +66,4 @@ const useApproval = (
   }
 }
 
-export default useApproval
+export default useDepositApproval

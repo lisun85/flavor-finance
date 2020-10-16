@@ -10,7 +10,9 @@ BigNumber.config({
 const GAS_LIMIT = {
   DEPOSITING: {
     DEFAULT: 200000,
-    SNX: 850000,
+  },
+  APPROVING: {
+    DEFAULT: 200000,
   },
 };
 
@@ -26,6 +28,20 @@ withdrawAndRedeemCollateral(uint256 collateral)
 
 */
 
+export const approve = async (
+  Flavor,
+  podContractAddress,
+  tokenAddress,
+  account,
+  onTxHash
+) => {
+  const flavorPodContract = Flavor.contracts.flavorPod;
+  flavorPodContract.options.address = podContractAddress;
+  return flavorPodContract.methods
+    .approve(tokenAddress, ethers.constants.MaxUint256)
+    .send({ from: account, gas: 80000 })
+};
+
 export const deposit = async (
   Flavor,
   podContractAddress,
@@ -36,48 +52,28 @@ export const deposit = async (
   const flavorPodContract = Flavor.contracts.flavorPod; // TODO: change to flavorPod
   flavorPodContract.options.address = podContractAddress;
   window.console.log("set pod contract address to ", podContractAddress);
-  let now = new Date().getTime() / 1000;
-  // const gas = GAS_LIMIT.DEPOSITING[tokenName.toUpperCase()] || GAS_LIMIT.DEPOSITING.DEFAULT;
   const gas = GAS_LIMIT.DEPOSITING.DEFAULT;
-  if (now >= 1597172400) {
-    const usdcAmount = new BigNumber(amount)
-      .times(new BigNumber(10).pow(6))
-      .toString();
 
-    return flavorPodContract.methods
-      .approve(podContractAddress, amount)
-      .send({ from: account, gas }, async (error, txHash) => {
-        if (error) {
-          onTxHash && onTxHash("");
-          console.log("Aproving error", error);
-          return false;
-        }
-        onTxHash && onTxHash(txHash);
-        const status = await waitTransaction(Flavor.web3.eth, txHash);
-        if (!status) {
-          console.log("Aproving transaction failed.");
-          return false;
-        }
-        flavorPodContract.methods
-          .deposit(account, usdcAmount)
-          .send({ from: account, gas }, async (error, txHash) => {
-            if (error) {
-              onTxHash && onTxHash("");
-              console.log("Depositing error", error);
-              return false;
-            }
-            onTxHash && onTxHash(txHash);
-            const status = await waitTransaction(Flavor.web3.eth, txHash);
-            if (!status) {
-              console.log("Depositing transaction failed.");
-              return false;
-            }
-            return true;
-          });
-      });
-  } else {
-    alert("pool not active");
-  }
+  const usdcAmount = new BigNumber(amount)
+    .times(new BigNumber(10).pow(6))
+    .toString();
+
+  return flavorPodContract.methods
+        .deposit(account, usdcAmount)
+        .send({ from: account, gas }, async (error, txHash) => {
+          if (error) {
+            onTxHash && onTxHash("");
+            console.log("Depositing error", error);
+            return false;
+          }
+          onTxHash && onTxHash(txHash);
+          const status = await waitTransaction(Flavor.web3.eth, txHash);
+          if (!status) {
+            console.log("Depositing transaction failed.");
+            return false;
+          }
+          return true;
+        });
 };
 
 const sleep = (ms) => {

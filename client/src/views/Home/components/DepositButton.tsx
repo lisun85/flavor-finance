@@ -5,7 +5,7 @@ import {
   Button,
 } from 'react-neu'
 import { useWallet } from 'use-wallet'
-import useFarming from 'hooks/useFarming'
+import useDeposit from 'hooks/useDeposit'
 import DepositModal from 'components/DepositModal'
 import UnlockWalletModal from 'components/UnlockWalletModal'
 
@@ -37,10 +37,10 @@ const DepositButton: React.FC<DepositButtonProps> = ({
     isStaking,
     isUnstaking,
     onApprove,
-    onStake,
+    onDeposit,
     onUnstake,
     stakedBalance,
-  } = useFarming()
+  } = useDeposit()
 
   const handleDepositClick = useCallback(() => {
     setDepositModalIsOpen(true)
@@ -116,7 +116,6 @@ const DepositButton: React.FC<DepositButtonProps> = ({
     onApprove,
     status,
   ])
-
   return (
     <>
       <DepositButtonWrapper>

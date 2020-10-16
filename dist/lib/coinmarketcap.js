@@ -38,18 +38,38 @@ function _fetchListings() {
   return _fetchListings.apply(this, arguments);
 }
 
-function fetchAssetPrices(_x) {
+function fetchQuotes(_x) {
+  return _fetchQuotes.apply(this, arguments);
+}
+
+function _fetchQuotes() {
+  _fetchQuotes = _asyncToGenerator(function* (assetSymbols) {
+    return new Promise((resolve, reject) => {
+      _axios.default.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest', {
+        params: {
+          'symbol': assetSymbols.join(',')
+        },
+        headers: {
+          'X-CMC_PRO_API_KEY': process.env.COIN_MARKET_CAP_API_KEY
+        }
+      }).then(res => {
+        resolve(res.data);
+      });
+    });
+  });
+  return _fetchQuotes.apply(this, arguments);
+}
+
+function fetchAssetPrices(_x2) {
   return _fetchAssetPrices.apply(this, arguments);
 }
 
 function _fetchAssetPrices() {
   _fetchAssetPrices = _asyncToGenerator(function* (assetSymbols) {
-    return fetchListings().then(results => {
+    return fetchQuotes(assetSymbols).then(results => {
       var assetResults = {};
-      results.data.forEach(result => {
-        if (assetSymbols.includes(result.symbol)) {
-          assetResults[result.symbol] = result.quote.USD.price;
-        }
+      Object.keys(results.data).forEach(key => {
+        assetResults[key] = results.data[key].quote.USD.price;
       });
       return assetResults;
     });

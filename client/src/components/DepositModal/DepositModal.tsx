@@ -175,7 +175,7 @@ const Deposit: React.FC<DepositProps> = ({
   const fullBalance = assetBalance
 
   const {
-    onStake,
+    onDeposit,
     isStaking
   } = useDeposit()
 
@@ -189,8 +189,8 @@ const Deposit: React.FC<DepositProps> = ({
 
   const handleDeposit = useCallback(() => {
     window.console.log(val);
-    onStake(asset, val)
-  }, [onStake, val, asset])
+    onDeposit(asset, val)
+  }, [onDeposit, val, asset])
 
   return (
     <>

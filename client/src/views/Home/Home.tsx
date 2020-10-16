@@ -37,14 +37,18 @@ const Instruction = styled.div`
 const DetailInstruction = styled.div`
   margin: 20px 0;
   line-height: 1.8em;
+  font-size: 21px;
 `;
 
 const InstructionsWrapper = styled.div`
     margin-bottom: 25px;
     text-align: center;
     margin-top: -84px;
-    font-size: 1.3em;
     max-width: 880px;
+`;
+
+const InstructionsIntro = styled.div`
+  font-size: 23px;
 `;
 
 const HomeInstructions : React.FC = () => {
@@ -52,15 +56,17 @@ const HomeInstructions : React.FC = () => {
   return (
     <InstructionsWrapper>
     <Spacer size="md" />
-    <Instruction>
-      <b>Flavor provides a simple, low-risk way to bet on your favorite assets.</b>
-    </Instruction>
-    <Instruction>
-      <b>When you win, FLAVOR stablecoins appear in your wallet as a reward.</b>
-    </Instruction>
-    <Instruction>
-      <b>And nobody loses - you can always withdraw at least what you've deposited.</b>
-    </Instruction>
+    <InstructionsIntro>
+      <Instruction>
+        <b>Flavor provides a simple, low-risk way to bet on your favorite assets.</b>
+      </Instruction>
+      <Instruction>
+        <b>When you win, FLAVOR stablecoins appear in your wallet as a reward.</b>
+      </Instruction>
+      <Instruction>
+        <b>And nobody loses - you can always withdraw at least what you've deposited.</b>
+      </Instruction>
+    </InstructionsIntro>
 
     {!showDetails
       ? (

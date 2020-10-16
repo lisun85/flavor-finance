@@ -7,7 +7,7 @@ const Context = createContext<ContextValues>({
   onApprove: () => {},
   onHarvest: () => {},
   onRedeem: () => {},
-  onStake: () => {},
+  onDeposit: () => {},
   onUnstake: () => {}
 })
 
