@@ -28,6 +28,15 @@ interface DepositModalProps {
   onDismiss: () => void,
 }
 
+const DepositInstructionsBox = styled(Box)`
+  margin-top: -40px;
+  margin-bottom: 27px;
+`;
+
+const DepositInstruction = styled.p`
+  margin-bottom: 0;
+`;
+
 const DepositModal: React.FC<DepositModalProps> = ({
   isOpen,
   onDismiss,
@@ -87,6 +96,15 @@ const DepositModal: React.FC<DepositModalProps> = ({
     <>
       <ModalTitle text={flavoredAssetSymbol(asset)} />
         <ModalContent>
+        <Box row>
+          <DepositInstructionsBox column>
+            <DepositInstruction>Whenever {asset} has had the largest daily price gain percent among all listed assets, your {flavoredAssetSymbol(asset)} balance will increase with an airdropped share of all FLAVOR interest earnings from the last 24 hours.</DepositInstruction>
+            <DepositInstruction>The exchange rate between USDC and {flavoredAssetSymbol(asset)} is always 1-to-1.</DepositInstruction>
+          </DepositInstructionsBox>
+        </Box>
+
+        <Separator />
+        <Spacer />
           <Split>
           <Box column>
             <Box row>
@@ -123,8 +141,6 @@ const DepositModal: React.FC<DepositModalProps> = ({
             </Box>
             </Box>
           </Split>
-          <Spacer />
-          <Separator />
           <Spacer />
         </ModalContent>
         <Separator />

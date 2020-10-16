@@ -85,7 +85,7 @@ const HomeInstructions : React.FC = () => {
             <b>Exchange USDC for FLAVOR tokens</b>: Choose an asset shown below that you predict will increase in price. Exchange USDC for FLAVOR tokens corresponding to your selected asset. Deposited USDC earns daily interest through <a href="https://yearn.finance/vaults">yUSDC yEarn vaults</a>.
           </DetailInstruction>
           <DetailInstruction>
-            <div><b>Daily Airdrops</b>:  Once a day, the Flavor contract determines the prediction asset with the largest daily price increase by percentage. Accured interest earnings are rewarded via FLAVOR airdrops to holders of the winning token. Nobody ever loses deposited funds.</div>
+            <div><b>Daily Airdrops</b>:  Once a day, the Flavor contract determines the prediction asset with the largest daily price increase by percentage. Accrued interest earnings are rewarded via FLAVOR airdrops to holders of the winning token. Nobody ever loses deposited funds.</div>
             </DetailInstruction>
             <DetailInstruction>
               <div><b>Positive-Sum Stablecoins</b>:  FLAVOR tokens are fully collateralized and can always be exchanged for an equal amount of USDC. This along with the positive-sum prize mechanic make FLAVOR tokens a fun and low-risk replacement for USDC in your wallet.</div>
