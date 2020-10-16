@@ -12,7 +12,7 @@ interface TableFancyValueProps {
 }
 
 const FancyBox = styled(Box)`
-  width: 110px;
+  width: 150px;
 `;
 
 const TableFancyValue: React.FC<TableFancyValueProps> = ({

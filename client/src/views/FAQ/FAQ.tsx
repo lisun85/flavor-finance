@@ -29,7 +29,7 @@ const FAQ: React.FC = () => {
       <PageHeader
         icon="🌶️"
         subtitle=""
-        title="A Spicy New Twist on Yield Farming"
+        title="A Spicy New Twist on DeFi Savings"
       />
       <Container>
         <Card>

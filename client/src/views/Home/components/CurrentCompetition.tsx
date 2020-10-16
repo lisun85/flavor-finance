@@ -68,7 +68,8 @@ width: 130px;
 `;
 
 const PercentChangeBox = styled(Box)`
-width: 130px;
+width: 142px;
+padding-left: 15px;
 `;
 
 const DepositButtonBox = styled(Box)`
@@ -79,13 +80,13 @@ margin-left: 0px;
 const ASSET_NAMES = {
   "BTC": "Bitcoin",
   "ETH": "Ethereum",
-  "LINK": "Chainlink"
+  "SDEFI": "sDeFi Index"
 }
 
 const ASSET_ICONS = {
   "BTC": "₿",
   "ETH": "Ξ",
-  "LINK": "⬡"
+  "SDEFI": "🧩"
 }
 
 const timeFormat = dt => (
@@ -161,11 +162,12 @@ const CurrentCompetition: React.FC = () => {
           />
         </Split>
       </CardContent>
-      <Box marginTop={4} marginHorizontal={4}>
-        <Separator />
-      </Box>
       {assets.map(asset => (
         <Asset key={asset.asset}>
+          <Box marginTop={4} marginHorizontal={4}>
+            <Separator />
+          </Box>
+          <Spacer size="md" />
           <Split>
             <TableFancyValue
               icon={ASSET_ICONS[asset.asset]}
@@ -192,7 +194,7 @@ const CurrentCompetition: React.FC = () => {
                 <PriceValue>${Math.round(asset.latestPrice * 100) / 100}</PriceValue>
               </LatestPriceBox>
               <PercentChangeBox
-                alignItems="center"
+                alignItems="baseline"
                 column
               >
                 <Label text="Change" />

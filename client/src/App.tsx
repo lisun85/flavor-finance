@@ -44,11 +44,8 @@ const App: React.FC = () => {
         <TopBar onPresentMobileMenu={handlePresentMobileMenu} />
         <MobileMenu onDismiss={handleDismissMobileMenu} visible={mobileMenu} />
         <Switch>
-          <Route exact path="/home">
+          <Route exact path="/">
             <Home />
-          </Route>
-          <Route exact path="/farm">
-            <Farm />
           </Route>
           <Route path="/about">
             <FAQ />
@@ -56,12 +53,14 @@ const App: React.FC = () => {
           <Route path="/history">
             <History />
           </Route>
+          {/*
+          <Route exact path="/farm">
+            <Farm />
+          </Route>
           <Route exact path="/funds">
             <Funds />
           </Route>
-          <Route path="/">
-            <FAQ />
-          </Route>
+          */}
         </Switch>
       </Providers>
     </Router>
