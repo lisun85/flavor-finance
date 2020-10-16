@@ -17,7 +17,8 @@ var transactionCount = -1;
 
 var getPodContract = function getPodContract() {
   var signingAccount = web3.eth.accounts.privateKeyToAccount('0x' + process.env.ETH_PRIVATE_KEY);
-  var web3 = new Web3('https://ropsten.infura.io/v3/' + process.env.INFURA_KEY);
+  var infuraSubdomain = process.env.NODE_ENV === 'production' ? 'mainnet' : 'ropsten';
+  var web3 = new Web3("https://".concat(infuraSubdomain, ".infura.io/v3/").concat(process.env.INFURA_KEY));
   var PodContractAddress = '0x...';
   var PodContract = JSON.parse(fs.readFileSync('./contracts/FlavorPod.json', 'utf8'));
   var PodContractABI = PodContract['abi'];

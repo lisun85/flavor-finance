@@ -188,6 +188,7 @@ const Deposit: React.FC<DepositProps> = ({
   }, [fullBalance, setVal])
 
   const handleDeposit = useCallback(() => {
+    window.console.log(val);
     onStake(asset, val)
   }, [onStake, val, asset])
 
@@ -206,8 +207,9 @@ const Deposit: React.FC<DepositProps> = ({
         <Separator />
         <ModalActions>
         <Button
+          disabled={!val}
           onClick={handleDeposit}
-          text="Deposit"
+          text="Continue"
         />
           <Button
             onClick={onBack}
@@ -255,8 +257,9 @@ const Withdraw: React.FC<DepositProps> = ({
         <Separator />
         <ModalActions>
         <Button
+          disabled={!val}
           onClick={handleWithdraw}
-          text="Withdraw"
+          text="Continue"
         />
           <Button
             onClick={onBack}
@@ -268,7 +271,7 @@ const Withdraw: React.FC<DepositProps> = ({
   )
 }
 
-const flavoredAssetSymbol = asset => (`FLAVOR-USDC-${asset}`);
+const flavoredAssetSymbol = asset => (`FLAVOR-${asset}`);
 
 
 export default DepositModal

@@ -52,6 +52,11 @@ const PriceValue = styled.span`
 
 const CardTitleWrapper = styled.div`
   font-weight: bold;
+
+  span{
+    font-size: 1.6em;
+  }
+
 `;
 
 const StartingPriceBox = styled(Box)`

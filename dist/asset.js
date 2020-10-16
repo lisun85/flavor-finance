@@ -236,7 +236,9 @@ function getHistory() {
 
 function _getHistory() {
   _getHistory = _asyncToGenerator(function* () {
-    var [historyRecords] = yield datastore.runQuery(datastore.createQuery('PrizePeriodHistory'));
+    var [historyRecords] = yield datastore.runQuery(datastore.createQuery('PrizePeriodHistory').order('date', {
+      descending: true
+    }));
     return historyRecords;
   });
   return _getHistory.apply(this, arguments);

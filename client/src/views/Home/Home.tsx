@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import {
+  Button,
   Container,
   Spacer,
   useTheme,
@@ -20,51 +21,65 @@ import CurrentCompetition from './components/CurrentCompetition'
 import NextCompetition from './components/NextCompetition'
 import styled from 'styled-components'
 
+
+const ButtonWrapper = styled.div`
+  button {
+    margin: auto;
+  }
+`;
+
 const Instruction = styled.div`
   margin: 10px 0;
 `;
 
-const HomeInstructions = () => (
-  <div>
+const DetailInstruction = styled.div`
+  margin: 20px 0;
+  line-height: 1.8em;
+`;
+
+const InstructionsWrapper = styled.div`
+  margin-bottom: -20px;
+`;
+
+const HomeInstructions : React.FC = () => {
+  const [showDetails, setShowDetails] = useState(false);
+  return (
+    <InstructionsWrapper>
+    <Spacer size="md" />
     <Instruction>
-      <b>Here's how it works:</b>
+      <b>Flavor provides a simple, low-risk way to bet on your favorite assets.</b>
     </Instruction>
     <Instruction>
-      <b>Step 1</b>: Choose an asset shown below that you think will increase in price. Deposit USDC and receive FLAVOR-USDC tokens for the selected asset.
+      <b>When you win, FLAVOR stablecoins appear in your wallet as a reward.</b>
     </Instruction>
     <Instruction>
-      <b>Step 2</b>: Deposited USDC is routed into the yUSDC yEarn vault and earns interest.
-    </Instruction>
-    <Instruction>
-      <div><b>Step 3</b>:  Every day, interest earned is allocated to the FLAVOR-USDC token that has a corresponding asset with the largest relative daily price gain. Holders of this FLAVOR-USDC token receive an automatic increase in their token balance.</div>
-      </Instruction>
-    <Instruction style={{marginTop: 20}}>
-      <b>A chance of winning without the risk of losing</b>
-    </Instruction>
-    <Instruction>
-    <div>Whenever your selected asset does not win the daily prize period, you maintain your balance of the corresponding FLAVOR-USDC token.</div>
-      </Instruction>
-    <Instruction>
-    <div>FLAVOR-USDC tokens are always redeemable for an equal amount of USDC, and you will always be able to withdraw an equal or greater amount of USDC that you had deposited.</div>
+      <b>And nobody loses - you can always withdraw at least what you've deposited.</b>
     </Instruction>
 
-      {false && (
-          <React.Fragment>
-      <Instruction style={{marginTop: 20}}>
-        <b>And a couple more things:</b>
-      </Instruction>
-      <Instruction>
-        <b>FLAVOR</b>: You'll accumulate FLAVOR tokens every week, whether you win or lose.
-      </Instruction>
-      <Instruction>
-        <b>Opting Out</b>: At any point, you can opt-out or opt-in to future competitions. Opting out means you'll earn interest at the normal rate without any withdrawal fees.
-      </Instruction>
-      </React.Fragment>
-    )}
+    {!showDetails
+      ? (
+        <ButtonWrapper>
+          <Spacer size="md" />
+          <Button onClick={() => setShowDetails(true)}>How It Works</Button>
+        </ButtonWrapper>
+      ) : (
+        <React.Fragment>
+          <Spacer size="sm" />
+          <DetailInstruction>
+            <b>Exchange USDC for FLAVOR tokens</b>: Choose an asset shown below that you predict will increase in price. Sign in, and exchange USDC for FLAVOR tokens corresponding to your selected asset. Deposited USDC earns interest with <a href="https://yearn.finance/vaults">yUSDC yEarn vaults</a>.
+          </DetailInstruction>
+          <DetailInstruction>
+            <div><b>Daily Airdrops</b>:  Once a day, the Flavor contract determines the prediction asset with the largest daily price increase by percentage. Accured interest earnings are rewarded via FLAVOR airdrops to holders of the winning token. Nobody ever loses deposited funds.</div>
+            </DetailInstruction>
+            <DetailInstruction>
+              <div><b>Positive-Sum Stability</b>:  FLAVOR tokens are fully collateralized and can always be exchanged for an equal amount of USDC. This along with the positive-sum prize mechanic make FLAVOR tokens a fun and low-risk replacement for USDC in your wallet.</div>
+              </DetailInstruction>
+          </React.Fragment>
+      )}
+    </InstructionsWrapper>
+  );
 
-
-  </div>
-);
+}
 
 const Home: React.FC = () => {
   const { darkMode } = useTheme()
@@ -77,8 +92,8 @@ const Home: React.FC = () => {
     <Page>
       <PageHeader
         icon=""
-        subtitle={HomeInstructions()}
-        title="🌶️ &nbsp; A Spicy New Twist on Yield Farming &nbsp; 🌶️"
+        subtitle={<HomeInstructions />}
+        title="🌶️ &nbsp; A Spicy New Twist on DeFi Savings &nbsp; 🌶️"
       />
       <Container>
         {false && (
