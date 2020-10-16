@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import {
+  Box,
   Button,
   Container,
+  Separator,
   Spacer,
   useTheme,
 } from 'react-neu'
@@ -38,7 +40,11 @@ const DetailInstruction = styled.div`
 `;
 
 const InstructionsWrapper = styled.div`
-  margin-bottom: -20px;
+    margin-bottom: 25px;
+    text-align: center;
+    margin-top: -84px;
+    font-size: 1.3em;
+    max-width: 880px;
 `;
 
 const HomeInstructions : React.FC = () => {
@@ -64,15 +70,19 @@ const HomeInstructions : React.FC = () => {
         </ButtonWrapper>
       ) : (
         <React.Fragment>
+        <Box marginTop={4} marginHorizontal={4}>
+          <Separator />
           <Spacer size="sm" />
+        </Box>
+
           <DetailInstruction>
-            <b>Exchange USDC for FLAVOR tokens</b>: Choose an asset shown below that you predict will increase in price. Sign in, and exchange USDC for FLAVOR tokens corresponding to your selected asset. Deposited USDC earns interest with <a href="https://yearn.finance/vaults">yUSDC yEarn vaults</a>.
+            <b>Exchange USDC for FLAVOR tokens</b>: Choose an asset shown below that you predict will increase in price. Exchange USDC for FLAVOR tokens corresponding to your selected asset. Deposited USDC earns daily interest through <a href="https://yearn.finance/vaults">yUSDC yEarn vaults</a>.
           </DetailInstruction>
           <DetailInstruction>
             <div><b>Daily Airdrops</b>:  Once a day, the Flavor contract determines the prediction asset with the largest daily price increase by percentage. Accured interest earnings are rewarded via FLAVOR airdrops to holders of the winning token. Nobody ever loses deposited funds.</div>
             </DetailInstruction>
             <DetailInstruction>
-              <div><b>Positive-Sum Stability</b>:  FLAVOR tokens are fully collateralized and can always be exchanged for an equal amount of USDC. This along with the positive-sum prize mechanic make FLAVOR tokens a fun and low-risk replacement for USDC in your wallet.</div>
+              <div><b>Positive-Sum Stablecoins</b>:  FLAVOR tokens are fully collateralized and can always be exchanged for an equal amount of USDC. This along with the positive-sum prize mechanic make FLAVOR tokens a fun and low-risk replacement for USDC in your wallet.</div>
               </DetailInstruction>
           </React.Fragment>
       )}
@@ -92,9 +102,9 @@ const Home: React.FC = () => {
     <Page>
       <PageHeader
         icon=""
-        subtitle={<HomeInstructions />}
         title="🌶️ &nbsp; A Spicy New Twist on DeFi Savings &nbsp; 🌶️"
       />
+      <HomeInstructions />
       <Container>
         {false && (
           <CompetitionSwitch

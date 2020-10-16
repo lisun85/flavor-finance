@@ -4,7 +4,7 @@ const Datastore = require('@google-cloud/datastore');
 
 const datastore = new Datastore();
 
-const ASSETS = ["BTC", "ETH", "LINK"];
+const ASSETS = ["BTC", "ETH", "SDEFI"];
 
 async function endPrizePeriod() {
   // TODO: call completeAward method on prize strategy contract
@@ -180,8 +180,9 @@ async function getAssetPrices() {
   const [assetPrices] = await datastore.runQuery(
     datastore.createQuery('AssetPrice')
   );
+
   assetPrices.sort((a, b) => b.percentChange - a.percentChange);
-  return assetPrices;
+  return assetPrices.filter(asset => ASSETS.includes(asset.asset));
 }
 
 
