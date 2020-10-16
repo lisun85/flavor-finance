@@ -35,10 +35,10 @@ export const approve = async (
   account,
   onTxHash
 ) => {
-  const flavorPodContract = Flavor.contracts.flavorPod;
-  flavorPodContract.options.address = podContractAddress;
-  return flavorPodContract.methods
-    .approve(tokenAddress, ethers.constants.MaxUint256)
+  const usdcContract = Flavor.contracts.flavorPod;
+  usdcContract.options.address = tokenAddress
+  return usdcContract.methods
+    .approve(podContractAddress, ethers.constants.MaxUint256)
     .send({ from: account, gas: 80000 })
 };
 
