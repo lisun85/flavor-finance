@@ -3,7 +3,7 @@ import React, { createContext, useEffect, useState } from 'react'
 import { useWallet } from 'use-wallet'
 
 import { Flavor as FlavorSDK } from 'flavor-sdk/lib'
-import { NETWORKS } from 'flavor-sdk/lib/lib/constants';
+import { DEFAULT_NETWORK } from 'flavor-sdk/lib/lib/constants';
 
 export interface FlavorContext {
   Flavor?: any
@@ -27,7 +27,7 @@ const FlavorProvider: React.FC = ({ children }) => {
     if (ethereum) {
       const FlavorLib = new FlavorSDK(
         ethereum,
-        NETWORKS.ROPSTEN,
+        DEFAULT_NETWORK,
         IS_TESTING, {
           defaultAccount: "",
           defaultConfirmations: 1,

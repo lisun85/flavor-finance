@@ -118,7 +118,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
             <Box row>
               <Button
                 onClick={onClickDeposit}
-                text={`Swap USDC for ${flavoredAssetSymbol(asset)}`}
+                text={`Deposit USDC for ${flavoredAssetSymbol(asset)}`}
                 size="sm"
               />
             </Box>
@@ -135,7 +135,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
            <Box row>
               <Button
                 onClick={onClickWithdraw}
-                text={`Swap ${flavoredAssetSymbol(asset)} for USDC`}
+                text={`Withdraw ${flavoredAssetSymbol(asset)} for USDC`}
                 size="sm"
               />
             </Box>
@@ -209,7 +209,7 @@ const Deposit: React.FC<DepositProps> = ({
 
   return (
     <>
-      <ModalTitle text={`Swap USDC for ${flavoredAssetSymbol(asset)}`} />
+      <ModalTitle text={`Deposit USDC for ${flavoredAssetSymbol(asset)}`} />
         <ModalContent>
         <TokenInput
           value={val}
@@ -264,7 +264,7 @@ const Withdraw: React.FC<DepositProps> = ({
 
   return (
     <>
-      <ModalTitle text={`Swap ${flavoredAssetSymbol(asset)} for USDC`} />
+      <ModalTitle text={`Withdraw ${flavoredAssetSymbol(asset)} for USDC`} />
         <ModalContent>
         <TokenInput
           value={val}

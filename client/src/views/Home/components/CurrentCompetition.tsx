@@ -56,7 +56,15 @@ const CardTitleWrapper = styled.div`
   span{
     font-size: 1.6em;
   }
+`;
 
+const WinningInstruction = styled.p`
+    font-size: 0.8em;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: -5px;
+    font-weight: normal;
+    margin-left: -30px;
 `;
 
 const StartingPriceBox = styled(Box)`
@@ -90,7 +98,7 @@ const ASSET_ICONS = {
 }
 
 const timeFormat = dt => (
-  `${dt.getMonth()}/${dt.getDate()} ${dt.getHours()}:00`
+  `${dt.toLocaleString('default', { month: 'short' })} ${dt.getDate()} ${dt.getHours()}:00`
 )
 
 const CurrentCompetition: React.FC = () => {
@@ -161,6 +169,8 @@ const CurrentCompetition: React.FC = () => {
             value={schedule.timeUntilEnd}
           />
         </Split>
+        <WinningInstruction>The winning asset has the largest percentage price increase from the prize period start time to end time.</WinningInstruction>
+
       </CardContent>
       {assets.map(asset => (
         <Asset key={asset.asset}>

@@ -25,8 +25,10 @@ export const INTEGERS = {
 export const addressMap = {}
 
 export const NETWORKS = {
-  PRODUCTION: "1",
-  ROPSTEN: "3",
-  RINKEBY: "4",
-  KOVAN: "42"
+  PRODUCTION: 1,
+  ROPSTEN: 3,
+  RINKEBY: 4,
+  KOVAN: 42
 }
+
+export const DEFAULT_NETWORK = NETWORKS.ROPSTEN

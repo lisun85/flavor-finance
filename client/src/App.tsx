@@ -20,7 +20,7 @@ import { VestingProvider } from 'contexts/Vesting'
 import FlavorProvider from 'contexts/FlavorProvider'
 
 import useLocalStorage from 'hooks/useLocalStorage'
-
+import { DEFAULT_NETWORK } from 'flavor-sdk/lib/lib/constants';
 import Farm from 'views/Farm'
 import FAQ from 'views/FAQ'
 import History from 'views/History'
@@ -83,7 +83,7 @@ const Providers: React.FC = ({ children }) => {
       lightTheme={lightTheme}
     >
       <UseWalletProvider
-        chainId={1}
+        chainId={DEFAULT_NETWORK}
         connectors={{
           walletconnect: { rpcUrl: 'https://mainnet.eth.aragon.network/' },
         }}
