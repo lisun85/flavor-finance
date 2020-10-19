@@ -10,11 +10,11 @@ import WalletModal from 'components/WalletModal'
 interface WalletButtonProps {}
 
 const WalletButton: React.FC<WalletButtonProps> = (props) => {
-  
+
   const [walletModalIsOpen, setWalletModalIsOpen] = useState(false)
   const [unlockModalIsOpen, setUnlockModalIsOpen] = useState(false)
 
-  const { account } = useWallet()
+  const { account, reset } = useWallet()
 
   const handleDismissUnlockModal = useCallback(() => {
     setUnlockModalIsOpen(false)
@@ -27,6 +27,10 @@ const WalletButton: React.FC<WalletButtonProps> = (props) => {
   const handleWalletClick = useCallback(() => {
     setWalletModalIsOpen(true)
   }, [setWalletModalIsOpen])
+
+  const handleSignOut = useCallback(() => {
+    reset()
+  }, [reset])
 
   const handleUnlockWalletClick = useCallback(() => {
     setUnlockModalIsOpen(true)
@@ -43,15 +47,15 @@ const WalletButton: React.FC<WalletButtonProps> = (props) => {
           />
         ) : (
           <Button
-            onClick={handleWalletClick}
+            onClick={handleSignOut}/*{handleWalletClick}*/
             size="sm"
-            text="View Balances"
+            text="Sign Out"/* View Balances */
             variant="tertiary"
           />
         )}
       </StyledWalletButton>
       <WalletModal
-        isOpen={walletModalIsOpen} 
+        isOpen={walletModalIsOpen}
         onDismiss={handleDismissWalletModal}
       />
       <UnlockWalletModal

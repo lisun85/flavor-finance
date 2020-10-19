@@ -12,7 +12,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var Datastore = require('@google-cloud/datastore');
 
-var web3interface = require('./web3interface');
+var web3interface = require('./lib/web3interface');
 
 var web3 = web3interface.web3;
 var ProxyWalletABI = web3interface.ProxyWalletABI;

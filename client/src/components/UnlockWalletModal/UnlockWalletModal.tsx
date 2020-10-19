@@ -24,10 +24,12 @@ const UnlockWalletModal: React.FC<ModalProps> = ({
   const { account, connect } = useWallet()
 
   const handleConnectMetamask = useCallback(() => {
+    window.console.log('handleConnectMetamask')
     connect('injected')
   }, [connect])
 
   const handleConnectWalletConnect = useCallback(() => {
+    window.console.log('handleConnectWalletConnect')
     connect('walletconnect')
   }, [connect])
 

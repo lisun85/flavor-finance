@@ -24,6 +24,7 @@ const Provider: React.FC = ({ children }) => {
   const { account, ethereum }: { account: string | null, ethereum: provider } = useWallet()
 
   const fetchBalances = useCallback(async (userAddress: string, provider: provider) => {
+    window.console.log('balances', USDCAddress, userAddress, provider);
     const balances = await Promise.all([
       await getBalance(provider, USDCAddress, userAddress),
       await getBalance(provider, FlavorTokenAddresses['BTC'], userAddress),

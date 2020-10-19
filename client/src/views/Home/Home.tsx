@@ -58,7 +58,7 @@ const HomeInstructions : React.FC = () => {
     <Spacer size="md" />
     <InstructionsIntro>
       <Instruction>
-        <b>Flavor provides a simple, low-risk way to bet on your favorite assets.</b>
+        <b>FLAVOR provides a simple, low-risk way to bet on your favorite assets.</b>
       </Instruction>
       <Instruction>
         <b>When you win, FLAVOR stablecoins appear in your wallet as a reward.</b>

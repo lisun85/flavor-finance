@@ -58,10 +58,12 @@ export const deposit = async (
     .times(new BigNumber(10).pow(6))
     .toString();
 
-  window.console.log('depositing amount', amount, 'usdc amount', usdcAmount);
+  window.console.log('depositing amount', amount, 'usdc amount', usdcAmount, 'account', account);
+  ///index.js:61 depositing amount 20 usdc amount 20000000
+// invalid arrayify value (argument="value", value="20000000", code=INVALID_ARGUMENT, version=bytes/5.0.4)
 
   return flavorPodContract.methods
-        .deposit(account, usdcAmount)
+        .deposit(usdcAmount, [])
         .send({ from: account, gas }, async (error, txHash) => {
           if (error) {
             onTxHash && onTxHash("");

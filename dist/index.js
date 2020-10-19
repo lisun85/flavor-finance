@@ -85,6 +85,9 @@ app.get('/api/assetPrices', (req, res, next) => {
 app.get("/about", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
+app.get("/history", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
 app.get("/about/*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });

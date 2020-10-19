@@ -1,5 +1,6 @@
 import axios from "axios";
 const coinmarketcap = require('./lib/coinmarketcap');
+const web3interface = require('./lib/web3interface');
 const Datastore = require('@google-cloud/datastore');
 
 const datastore = new Datastore();
@@ -8,19 +9,24 @@ const ASSETS = ["BTC", "ETH", "SDEFI"];
 
 async function endPrizePeriod() {
   // TODO: call completeAward method on prize strategy contract
-  //await completeAward();
-  const winner = await calculateWinner();
-  saveWinner(winner);
 
   // TODO: replace this with event so it will always be onchain result
+  const winner = await calculateWinner();
+  saveWinner(winner);
+  await completeAward();
+
 }
 
 async function completeAward() {
-  const podContract = web3interface.getPodContract();
-  podContract.methods.completeAward()
-  .send({ from: process.env.ETH_SIGNING_ACCOUNT, gas: '1500000' }, async (error, txHash) => {
+  const web3 = web3interface._Web3();
+  const prizeStrategyContract = web3interface.getPrizeStrategyContract(web3);
+  prizeStrategyContract.methods.completeAward()
+  .send({
+    from: web3.eth.defaultAccount,
+    gas: '1500000',
+		gasPrice: 20000000000
+  }, async (error, txHash) => {
     if (error) {
-        //onTxHash && onTxHash('')
         console.log("Depositing error", error)
         return false
     }
@@ -33,7 +39,7 @@ async function calculateWinner() {
   );
 
   assetPrices.sort((a, b) => b.percentChange - a.percentChange);
-  const winner = assetPrices[0];
+  const winner = assetPrices.filter(asset => ASSETS.includes(asset.asset))[0];
   console.log('winner', winner);
   return winner;
 }

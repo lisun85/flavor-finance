@@ -1,10 +1,5 @@
 const Datastore = require('@google-cloud/datastore');
-const web3interface = require('./web3interface');
-const web3 = web3interface.web3;
-const ProxyWalletABI = web3interface.ProxyWalletABI;
-const signingAccount = web3interface.signingAccount;
-const FactoryContract = web3interface.FactoryContract;
-const FactoryAddress = web3interface.FactoryAddress;
+
 
 // Creates a client
 const datastore = new Datastore();

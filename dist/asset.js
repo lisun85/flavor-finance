@@ -20,6 +20,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var coinmarketcap = require('./lib/coinmarketcap');
 
+var web3interface = require('./lib/web3interface');
+
 var Datastore = require('@google-cloud/datastore');
 
 var datastore = new Datastore();
@@ -32,9 +34,10 @@ function endPrizePeriod() {
 function _endPrizePeriod() {
   _endPrizePeriod = _asyncToGenerator(function* () {
     // TODO: call completeAward method on prize strategy contract
-    //await completeAward();
+    // TODO: replace this with event so it will always be onchain result
     var winner = yield calculateWinner();
-    saveWinner(winner); // TODO: replace this with event so it will always be onchain result
+    saveWinner(winner);
+    yield completeAward();
   });
   return _endPrizePeriod.apply(this, arguments);
 }
@@ -45,8 +48,8 @@ function completeAward() {
 
 function _completeAward() {
   _completeAward = _asyncToGenerator(function* () {
-    var podContract = web3interface.getPodContract();
-    podContract.methods.completeAward().send({
+    var prizeStrategyContract = web3interface.getPrizeStrategyContract();
+    prizeStrategyContract.methods.completeAward().send({
       from: process.env.ETH_SIGNING_ACCOUNT,
       gas: '1500000'
     }, /*#__PURE__*/function () {
@@ -74,7 +77,7 @@ function _calculateWinner() {
   _calculateWinner = _asyncToGenerator(function* () {
     var [assetPrices] = yield datastore.runQuery(datastore.createQuery('AssetPrice'));
     assetPrices.sort((a, b) => b.percentChange - a.percentChange);
-    var winner = assetPrices[0];
+    var winner = assetPrices.filter(asset => ASSETS.includes(asset.asset))[0];
     console.log('winner', winner);
     return winner;
   });

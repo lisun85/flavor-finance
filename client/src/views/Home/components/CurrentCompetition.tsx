@@ -44,6 +44,12 @@ const AssetPercentChangeNegative = styled(AssetPercentChange)`
   color: red;
 `;
 
+const CurrentCompetitionCard = styled.div`
+  @media only screen and (max-width: 980px) {
+    display: none;
+  }
+`
+
 const PriceValue = styled.span`
   font-size: 22px;
   font-weight: 700;
@@ -146,7 +152,9 @@ const CurrentCompetition: React.FC = () => {
     return null;
   }
   return (
+    <React.Fragment>
     <Card>
+    <CurrentCompetitionCard>
     <CardTitleWrapper>
       <CardTitle text="Current Prize Period" />
     </CardTitleWrapper>
@@ -231,7 +239,9 @@ const CurrentCompetition: React.FC = () => {
         </Asset>
         )
       )}
+    </CurrentCompetitionCard>
     </Card>
+    </React.Fragment>
   )
 }
 
