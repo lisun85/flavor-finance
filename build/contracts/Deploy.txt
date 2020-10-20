@@ -1,0 +1,82 @@
+1_initial_migration.js
+======================
+
+   Deploying 'Migrations'
+   ----------------------
+   > transaction hash:    0x17f98df75aa97bf07084eeef8d422331e454a9e86d8e576e99ffead03ed3483a
+   > Blocks: 0            Seconds: 14
+   > contract address:    0x466db91082E6A36B38e5B6Fa964e6A02fc5C79E5
+   > block number:        7404452
+   > block timestamp:     1603223992
+   > account:             0x80E7AF981ad67c205438d9d9B7f55bF988d4eaD0
+   > balance:             18.541182429
+   > gas used:            225225 (0x36fc9)
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.0045045 ETH
+
+
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:           0.0045045 ETH
+
+
+2_deploy_contracts.js
+=====================
+
+   Deploying 'FlavorToken'
+   -----------------------
+   > transaction hash:    0xb0983451604f58bb77dd25ffa4cb2a3c265f74211cefd13e2cfde8356cfb9c9a
+   > Blocks: 1            Seconds: 22
+   > contract address:    0xE0C0520EbB694dD719531f5a5Ad71579A08e49d7
+   > block number:        7404456
+   > block timestamp:     1603224052
+   > account:             0x80E7AF981ad67c205438d9d9B7f55bF988d4eaD0
+   > balance:             18.525466529
+   > gas used:            743432 (0xb5808)
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.01486864 ETH
+
+
+   Deploying 'USDCToken'
+   ---------------------
+   > transaction hash:    0xc625a6926c2f55a6fd0020b7ce5be81ea318c49a012e26b88b0c568dd6c29b8c
+   > Blocks: 0            Seconds: 14
+   > contract address:    0xEd44DDe662674c187370537680108e231B5D306e
+   > block number:        7404458
+   > block timestamp:     1603224082
+   > account:             0x80E7AF981ad67c205438d9d9B7f55bF988d4eaD0
+   > balance:             18.510598609
+   > gas used:            743396 (0xb57e4)
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.01486792 ETH
+
+
+   Deploying 'FlavorTest'
+   ----------------------
+   > transaction hash:    0x9bfd009449e1e6c34e954106b1f16412a84d565a7320e08385ed8ea8d1fe88b5
+   > Blocks: 2            Seconds: 18
+   > contract address:    0xc3b3F7d3680389634d989a96A17c345Cf7F57BC6
+   > block number:        7404460
+   > block timestamp:     1603224112
+   > account:             0x80E7AF981ad67c205438d9d9B7f55bF988d4eaD0
+   > balance:             18.492529229
+   > gas used:            903469 (0xdc92d)
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.01806938 ETH
+
+
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          0.04780594 ETH
+
+
+Summary
+=======
+> Total deployments:   4
+> Final cost:          0.05231044 ETH
