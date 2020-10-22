@@ -26,11 +26,11 @@ const HistoryDataLarge = styled(HistoryData)`
   font-weight: bold;
 `;
 
-const formatDate = date => {
-  const year = date.slice(0,4);
-  const monthDay = date.slice(5).replace(/-/g,'/');
-  return `${monthDay}/${year}`;
+const formatDate = dateString => {
+  const dt = new Date(dateString)
+  return `${dt.toLocaleString('default', { month: 'short' })} ${dt.getDate()}`
 }
+
 
 const History: React.FC = () => {
 

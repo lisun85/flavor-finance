@@ -48,14 +48,16 @@ function completeAward() {
 
 function _completeAward() {
   _completeAward = _asyncToGenerator(function* () {
-    var prizeStrategyContract = web3interface.getPrizeStrategyContract();
+    var web3 = web3interface._Web3();
+
+    var prizeStrategyContract = web3interface.getPrizeStrategyContract(web3);
     prizeStrategyContract.methods.completeAward().send({
-      from: process.env.ETH_SIGNING_ACCOUNT,
-      gas: '1500000'
+      from: web3.eth.defaultAccount,
+      gas: '1500000',
+      gasPrice: 20000000000
     }, /*#__PURE__*/function () {
       var _ref = _asyncToGenerator(function* (error, txHash) {
         if (error) {
-          //onTxHash && onTxHash('')
           console.log("Depositing error", error);
           return false;
         }

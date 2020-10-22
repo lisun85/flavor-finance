@@ -10,15 +10,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var Datastore = require('@google-cloud/datastore');
+var Datastore = require('@google-cloud/datastore'); // Creates a client
 
-var web3interface = require('./lib/web3interface');
-
-var web3 = web3interface.web3;
-var ProxyWalletABI = web3interface.ProxyWalletABI;
-var signingAccount = web3interface.signingAccount;
-var FactoryContract = web3interface.FactoryContract;
-var FactoryAddress = web3interface.FactoryAddress; // Creates a client
 
 var datastore = new Datastore();
 
