@@ -64,7 +64,7 @@ const FAQ: React.FC = () => {
               <span>Your balance of FLAVOR tokens are always equivelent to the amount of USDC that you can redeem from the corresponding pod. If you have 100 <i>FLAVOR-BTC</i> tokens, they can then be used to withdraw 100 USDC tokens from the pod contract.</span>
               <span>When each daily supply rebase occurs, your balance of FLAVOR tokens will either remain the same or increase if your selected asset won the daily prize period. Because Flavor is "no-loss" and the only thing at stake is earned interest via yUSDC vaults, negative rebases will not occur and you'll always be able to redeem FLAVOR tokens for at least the amount of USDC that you had deposited.</span>
             </Question>
-            <Question
+            {/*<Question
               active={activeSlug === "Flavor-token"}
               question="What is the FLV token?"
               slug="Flavor-token"
@@ -73,14 +73,14 @@ const FAQ: React.FC = () => {
               <span>The launch of FLV farming will abide by strict fair launch principles, with no premining or early access.</span>
               <span>Using token voting, FLAVOR holders have direct influence over the Flavor treasury and direction of the protocol. Governance discussions will take place on the <ExternalLink href="https://forum.flavor.finance/">Flavor Governance Forum.</ExternalLink></span>
               <span>More information will be released soon regarding the Flavor treasury and how it fits into the Flavor system architecture.</span>
-            </Question>
+            </Question>*/}
             <Question
               active={activeSlug === "fairness"}
               question="How is fairness maintained?"
               slug="fairness"
             >
               <span>Without any considerations made for fairness, participants who deposit into a Flavor pod contract in the minutes or seconds before a prize period ends would have a considerable edge, and we would expect "sniping" by bots to likely become a problem.</span>
-              <span>At first, deposits made to a pod during a daily prize period will not be eligible for earnings until the next daily prize period.</span>
+              <span>For now, deposits made to a pod during a daily prize period will not be eligible for earnings until the next daily prize period.</span>
               <span>We are also investigating more sophisticated ways of maintaining fairness, including the <a href="https://docs.pooltogether.com/protocol/prize-pool/fairness" target="_blank">PoolTogether credit rate system</a>.</span>
             </Question>
             <Question

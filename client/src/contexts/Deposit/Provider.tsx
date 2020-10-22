@@ -160,6 +160,7 @@ const Provider: React.FC = ({ children }) => {
     )
 
     fetchBalances()
+    setTimeout(fetchBalances, 10000)
 
   }, [
     account,
@@ -191,6 +192,7 @@ const Provider: React.FC = ({ children }) => {
   )
 
   fetchBalances()
+  setTimeout(fetchBalances, 10000)
 
   }, [
     account,

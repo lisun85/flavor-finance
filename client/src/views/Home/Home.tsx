@@ -22,7 +22,10 @@ import Stats from './components/Stats'
 import CurrentCompetition from './components/CurrentCompetition'
 import NextCompetition from './components/NextCompetition'
 import styled from 'styled-components'
-
+import usdcLogo from 'assets/usdc.png'
+import chainlinkLogo from 'assets/chainlink.jpg'
+import pooltogetherLogo from 'assets/pooltogether.png'
+import yearnLogo from 'assets/yearn.png'
 
 const ButtonWrapper = styled.div`
   button {
@@ -50,6 +53,22 @@ const InstructionsWrapper = styled.div`
 const InstructionsIntro = styled.div`
   font-size: 23px;
 `;
+
+const BuiltWithTitle = styled.div`
+  font-weight: 700;
+  text-align: center;
+  font-size: 1.2em;
+  margin-top: 100px;
+`
+const BuiltWithLogos = styled.div`
+  text-align:center;
+  margin-top: 20px;
+
+  img {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+`
 
 const HomeInstructions : React.FC = () => {
   const [showDetails, setShowDetails] = useState(false);
@@ -121,6 +140,24 @@ const Home: React.FC = () => {
         {competitionType === 'current' && <CurrentCompetition /> }
         {competitionType === 'next' && <NextCompetition /> }
         <Spacer />
+      </Container>
+      <Container>
+        <BuiltWithTitle>Built With:
+          <BuiltWithLogos>
+            <a href="https://pooltogether.com/" target="_blank">
+              <img src={pooltogetherLogo} style={{ height: 70 }} />
+            </a>
+            <a href="https://chain.link" target="_blank">
+              <img src={chainlinkLogo} style={{ height: 70 }} />
+            </a>
+            <a href="https://yearn.finance/" target="_blank">
+              <img src={yearnLogo} style={{ height: 70 }} />
+            </a>
+            <a href="https://www.circle.com/usdc" target="_blank">
+              <img src={usdcLogo} style={{ height: 70 }} />
+            </a>
+          </BuiltWithLogos>
+        </BuiltWithTitle>
       </Container>
     </Page>
   )

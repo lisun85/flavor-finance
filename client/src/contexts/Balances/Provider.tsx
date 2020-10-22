@@ -36,6 +36,7 @@ const Provider: React.FC = ({ children }) => {
       //await getBalance(provider, yyrcvUniLpAddress, userAddress),
 
     ])
+    window.console.error('balances', balances)
     setUSDCBalance(new BigNumber(balances[0]).dividedBy(new BigNumber(10).pow(USDC_POW)))
     setFlavorTokenBalances({
       'BTC': new BigNumber(balances[1]).dividedBy(new BigNumber(10).pow(FLAVOR_POW)),
