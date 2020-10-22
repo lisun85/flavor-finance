@@ -1,0 +1,3 @@
+[submodule "flavor-prize-strategy"]
+	path = flavor-prize-strategy
+	url = https://github.com/flavor-finance/flavor-prize-strategy
