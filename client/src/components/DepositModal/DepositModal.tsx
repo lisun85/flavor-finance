@@ -46,14 +46,15 @@ const DepositModal: React.FC<DepositModalProps> = ({
   const { reset } = useWallet()
   const {
     USDCBalance,
-    FlavorTokenBalances
+    FlavorTokenBalances,
+    fetchBalances
   } = useBalances()
 
   const [currentView, setCurrentView] = useState('overview')
 
-  const getDisplayBalance = useCallback((value?: BigNumber) => {
+  const getDisplayBalance = useCallback((value?: BigNumber, assetType?: string) => {
     if (value) {
-      return numeral(value).format('0.00a')
+      return numeral(value).format('0.00')
     } else {
       return '--'
     }
@@ -78,7 +79,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
   const usdcBalance = USDCBalance !== undefined
     ? USDCBalance
     : new BigNumber(0)
-  const usdcDisplayBalance = getDisplayBalance(usdcBalance)
+  const usdcDisplayBalance = getDisplayBalance(usdcBalance, 'usdc')
   const usdcSymbolIcon = usdcDisplayBalance == '0.00'
   ? <span role="img" style={{ opacity: 0.5 }} >💵</span>
   : <span role="img">💵</span>
@@ -86,7 +87,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
   const flavoredAssetBalance =  FlavorTokenBalances && FlavorTokenBalances[asset] !== undefined
     ? FlavorTokenBalances[asset]
     : new BigNumber(0)
-  const flavoredAssetDisplayBalance = getDisplayBalance(flavoredAssetBalance)
+  const flavoredAssetDisplayBalance = getDisplayBalance(flavoredAssetBalance, asset)
   const flavoredAssetSymbolIcon = flavoredAssetDisplayBalance == '0.00'
     ? <span role="img" style={{ opacity: 0.5 }} >🌶️</span>
     : <span role="img">🌶️</span>
@@ -162,6 +163,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
           asset={asset}
           assetBalance={usdcBalance}
           onBack={onBack}
+          fetchBalances={fetchBalances}
         />
       )}
       {currentView === 'withdraw' && (
@@ -169,6 +171,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
           asset={asset}
           assetBalance={flavoredAssetBalance}
           onBack={onBack}
+          fetchBalances={fetchBalances}
         />
       )}
     </Modal>
@@ -179,12 +182,14 @@ interface DepositProps {
   asset: string,
   assetBalance: BigNumber,
   onBack: () => void
+  fetchBalances: () => void
 }
 
 const Deposit: React.FC<DepositProps> = ({
   asset,
   assetBalance,
-  onBack
+  onBack,
+  fetchBalances
 }) => {
 
   const [val, setVal] = useState('')
@@ -204,8 +209,9 @@ const Deposit: React.FC<DepositProps> = ({
   }, [fullBalance, setVal])
 
   const handleDeposit = useCallback(() => {
-    onDeposit(asset, val)
-  }, [onDeposit, val, asset])
+    onDeposit(asset, val, fetchBalances)
+    onBack()
+  }, [onDeposit, val, asset, onBack, fetchBalances])
 
   return (
     <>
@@ -240,7 +246,8 @@ const Deposit: React.FC<DepositProps> = ({
 const Withdraw: React.FC<DepositProps> = ({
   asset,
   assetBalance,
-  onBack
+  onBack,
+  fetchBalances
 }) => {
 
   const [val, setVal] = useState('')
@@ -259,8 +266,9 @@ const Withdraw: React.FC<DepositProps> = ({
   }, [fullBalance, setVal])
 
   const handleWithdraw = useCallback(() => {
-    onWithdraw(asset, val)
-  }, [onWithdraw, val, asset])
+    onWithdraw(asset, val, fetchBalances)
+    onBack()
+  }, [onWithdraw, val, asset, onBack])
 
   return (
     <>

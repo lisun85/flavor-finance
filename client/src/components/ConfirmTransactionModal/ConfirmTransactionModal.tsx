@@ -11,8 +11,13 @@ import { useWallet } from 'use-wallet'
 import metamaskLogo from 'assets/metamask-fox.svg'
 import walletConnectLogo from 'assets/wallet-connect.svg'
 
-const ConfirmTransactionModal: React.FC<ModalProps> = ({
+interface TxModalProps {
+  message?: string
+}
+
+const ConfirmTransactionModal: React.FC<ModalProps & TxModalProps> = ({
   isOpen,
+  message,
 }) => {
   const { connector } = useWallet()
 
@@ -29,7 +34,7 @@ const ConfirmTransactionModal: React.FC<ModalProps> = ({
       <ModalContent>
         {WalletLogo}
         <Spacer />
-        <StyledText>Confirm transaction in wallet.</StyledText>
+        <StyledText>{message}</StyledText>
       </ModalContent>
     </Modal>
   )

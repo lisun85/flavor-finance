@@ -34,10 +34,10 @@ const UnlockWalletModal: React.FC<ModalProps> = ({
   }, [connect])
 
   useEffect(() => {
-    if (account) {
+    if (account && isOpen) {
       onDismiss && onDismiss()
     }
-  }, [account, onDismiss])
+  }, [account, onDismiss, isOpen])
 
   return (
     <Modal isOpen={isOpen}>

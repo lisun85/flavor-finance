@@ -7,7 +7,6 @@ import {
   approve,
 } from 'flavor-sdk/txUtils'
 import useFlavor from 'hooks/useFlavor'
-import useDepositAllowance from './useDepositAllowance'
 
 const useDepositApproval = (
   tokenAddress?: string,
@@ -18,25 +17,29 @@ const useDepositApproval = (
   const [isApproved, setIsApproved] = useState(false)
 
   const { account, ethereum }: { account: string | null, ethereum?: provider} = useWallet()
-  const allowance = useDepositAllowance(tokenAddress);
+
   const Flavor  = useFlavor()
 
   const handleApprove = useCallback(async (spenderAddress: string) => {
     if (!ethereum || !account || !spenderAddress || !tokenAddress) {
       return
     }
-    allowance.setSpenderAddress(spenderAddress);
     try {
       setIsApproving(true)
-      const result = await approve(
+      return await approve(
         Flavor,
         spenderAddress,
         tokenAddress,
         account,
         onTxHash,
+        error => {
+          setIsApproving(false)
+          if (!error){
+          setIsApproved(true)
+          }
+        }
       )
-      setIsApproved(result)
-      setIsApproving(false)
+
     } catch (e) {
       setIsApproving(false)
       return false
@@ -45,22 +48,15 @@ const useDepositApproval = (
     account,
     ethereum,
     onTxHash,
+    isApproved,
     setIsApproved,
     setIsApproving,
     tokenAddress,
   ])
 
-  useEffect(() => {
-    if (!!allowance.allowance?.toNumber()) {
-      setIsApproved(true)
-    }
-  }, [
-    allowance,
-    setIsApproved,
-  ])
-
   return {
     isApproved,
+    setIsApproved,
     isApproving,
     onApprove: handleApprove,
   }

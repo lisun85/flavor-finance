@@ -12,10 +12,11 @@ const useDepositAllowance = (tokenAddress?: string) => {
   const { account, ethereum }: { account: string | null, ethereum?: provider} = useWallet()
 
   const fetchAllowance = useCallback(async (userAddress: string, provider: provider) => {
-    if (!spenderAddress || !tokenAddress) {
+    if (!spenderAddress || !tokenAddress || !userAddress) {
       return
     }
     const allowance = await getAllowance(userAddress, spenderAddress, tokenAddress, provider)
+
     setAllowance(new BigNumber(allowance))
   }, [setAllowance, spenderAddress, tokenAddress])
 
@@ -29,6 +30,7 @@ const useDepositAllowance = (tokenAddress?: string) => {
 
   return {
     allowance,
+    setAllowance,
     setSpenderAddress
   }
 }

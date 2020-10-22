@@ -2,10 +2,11 @@ import React, { useCallback, useEffect, useState } from 'react'
 
 import BigNumber from 'bignumber.js'
 import { useWallet } from 'use-wallet'
-
+import { provider } from 'web3-core'
 import ConfirmTransactionModal from 'components/ConfirmTransactionModal'
 import useDepositApproval from 'hooks/useDepositApproval'
 import useFlavor from 'hooks/useFlavor'
+import useDepositAllowance from 'hooks/useDepositAllowance'
 
 import {
   getEarned,
@@ -30,6 +31,7 @@ const farmingStartTime = 1600545500*1000
 
 const Provider: React.FC = ({ children }) => {
   const [confirmTxModalIsOpen, setConfirmTxModalIsOpen] = useState(false)
+  const [confirmTxModalMessage, setConfirmTxModalMessage] = useState('')
   const [countdown, setCountdown] = useState<number>()
   const [isHarvesting, setIsHarvesting] = useState(false)
   const [isRedeeming, setIsRedeeming] = useState(false)
@@ -42,15 +44,29 @@ const Provider: React.FC = ({ children }) => {
   const [stakedBalance, setStakedBalance] = useState<BigNumber>()
 
   const Flavor  = useFlavor()
-  const { account } = useWallet()
+  const { account, ethereum }: { account: string | null, ethereum: provider } = useWallet()
+
 
   // TODO: REPLACE THESE
   const flavorUniLpAddress = '';
   const flavorPoolAddress = '';//Flavor ? Flavor.contracts.flavor_pool.options.address : ''
-  const { isApproved, isApproving, onApprove } = useDepositApproval(
+  const allowance = useDepositAllowance(USDCAddress)
+  const { isApproved, isApproving, onApprove, setIsApproved } = useDepositApproval(
     USDCAddress,
-    () => setConfirmTxModalIsOpen(false)
+    txHash => {
+      setConfirmTxModalMessage('Approval is processing...')
+    }
   )
+
+  useEffect(() => {
+    if (!isApproved && allowance.allowance?.toNumber()) {
+      window.console.log('setting is approved to true')
+      setIsApproved(true)
+    }
+  }, [
+    allowance,
+    setIsApproved,
+  ])
 
   const fetchEarnedBalance = useCallback(async () => {
     if (!account || !Flavor) return
@@ -72,13 +88,13 @@ const Provider: React.FC = ({ children }) => {
     Flavor
   ])
 
-  const fetchBalances = useCallback(async () => {
-    fetchEarnedBalance()
-    fetchStakedBalance()
-  }, [
-    fetchEarnedBalance,
-    fetchStakedBalance,
-  ])
+  // const fetchBalances = useCallback(async () => {
+  //   fetchEarnedBalance()
+  //   fetchStakedBalance()
+  // }, [
+  //   fetchEarnedBalance,
+  //   fetchStakedBalance,
+  // ])
 
   const handleApprove = useCallback(() => {
     setConfirmTxModalIsOpen(true)
@@ -117,43 +133,65 @@ const Provider: React.FC = ({ children }) => {
     Flavor
   ])
 
-
-  const handleDeposit = useCallback(async (asset: string, amount: string) => {
+  const handleDeposit = useCallback(async (asset: string, amount: string, fetchBalances: () => void) => {
     if (!Flavor) return
     const assetAddress = FlavorTokenAddresses[asset]
     setConfirmTxModalIsOpen(true)
+    let onApproved;
     if (!isApproved){
-      await onApprove(assetAddress);
-      window.console.log('approved!', isApproved);
+      setConfirmTxModalMessage('Confirm approval in wallet')
+      onApproved = await onApprove(assetAddress);
     }
+    if (!isApproved && !(onApproved && onApproved.blockNumber)){
+      window.console.error('Approval is required to make a deposit')
+      setConfirmTxModalIsOpen(false)
+      return;
+    }
+    setConfirmTxModalMessage('Confirm deposit in wallet')
+
     await deposit(Flavor, assetAddress,
         amount, account, () => {
+        setIsDepositing(true)
+        setConfirmTxModalMessage('Deposit is processing...')
+    }, error => {
       setConfirmTxModalIsOpen(false)
-      setIsDepositing(true)
-    })
-    setIsDepositing(false)
+      setIsDepositing(false)
+    }
+    )
+
+    fetchBalances()
+
   }, [
     account,
+    isApproved,
     setConfirmTxModalIsOpen,
     setIsDepositing,
     Flavor
   ])
 
 
-  const handleWithdraw = useCallback(async (asset: string, amount: string) => {
+  const handleWithdraw = useCallback(async (asset: string, amount: string, fetchBalances: () => void) => {
     if (!Flavor) return
     const assetAddress = FlavorTokenAddresses[asset]
     setConfirmTxModalIsOpen(true)
+    setConfirmTxModalMessage('Confirm withdrawal in wallet')
     // if (!isApproved){
     //   await onApprove(assetAddress);
     //   window.console.log('approved!', isApproved);
     // }
     await withdraw(Flavor, assetAddress,
         amount, account, () => {
-      setConfirmTxModalIsOpen(false)
       setIsWithdrawing(true)
-    })
-    setIsWithdrawing(false)
+      setConfirmTxModalMessage('Withdrawal is processing...')
+    }, () => {
+      setConfirmTxModalIsOpen(false)
+      setIsWithdrawing(false)
+
+}
+  )
+
+  fetchBalances()
+
   }, [
     account,
     setConfirmTxModalIsOpen,
@@ -176,11 +214,11 @@ const Provider: React.FC = ({ children }) => {
     Flavor
   ])
 
-  useEffect(() => {
-    fetchBalances()
-    let refreshInterval = setInterval(() => fetchBalances(), 10000)
-    return () => clearInterval(refreshInterval)
-  }, [fetchBalances])
+  // useEffect(() => {
+  //   fetchBalances()
+  //   let refreshInterval = setInterval(() => fetchBalances(), 10000)
+  //   return () => clearInterval(refreshInterval)
+  // }, [fetchBalances])
 
   useEffect(() => {
     let refreshInterval = setInterval(() => setCountdown(farmingStartTime - Date.now()), 1000)
@@ -190,6 +228,7 @@ const Provider: React.FC = ({ children }) => {
   return (
     <Context.Provider value={{
       countdown,
+      allowance,
       earnedBalance,
       isApproved,
       isApproving,
@@ -208,7 +247,7 @@ const Provider: React.FC = ({ children }) => {
       stakedBalance,
     }}>
       {children}
-      <ConfirmTransactionModal isOpen={confirmTxModalIsOpen} />
+      <ConfirmTransactionModal isOpen={confirmTxModalIsOpen} message={confirmTxModalMessage} />
     </Context.Provider>
   )
 }

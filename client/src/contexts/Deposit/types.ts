@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js'
 export interface ContextValues {
   countdown?: number,
   earnedBalance?: BigNumber,
+  allowance?: any,
   isApproved?: boolean,
   isApproving?: boolean,
   isHarvesting?: boolean,
@@ -14,8 +15,8 @@ export interface ContextValues {
   onApprove: () => void,
   onHarvest: () => void,
   onRedeem: () => void,
-  onDeposit: (amount: string, asset: string) => void,
-  onWithdraw: (amount: string, asset: string) => void,
+  onDeposit: (amount: string, asset: string, fetchBalances: () => void) => void,
+  onWithdraw: (amount: string, asset: string, fetchBalances: () => void) => void,
   onUnstake: (amount: string) => void,
   stakedBalance?: BigNumber,
 }

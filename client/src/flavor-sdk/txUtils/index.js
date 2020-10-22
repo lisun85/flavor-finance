@@ -2,6 +2,8 @@ import { ethers } from "ethers";
 import Web3 from "web3";
 import BigNumber from "bignumber.js";
 
+const USDC_POW = 18
+
 BigNumber.config({
   EXPONENTIAL_AT: 1000,
   DECIMAL_PLACES: 80,
@@ -33,13 +35,32 @@ export const approve = async (
   podContractAddress,
   tokenAddress,
   account,
-  onTxHash
+  onTxHash,
+  onComplete
 ) => {
   const usdcContract = Flavor.contracts.flavorPod;
   usdcContract.options.address = tokenAddress
   return usdcContract.methods
     .approve(podContractAddress, ethers.constants.MaxUint256)
-    .send({ from: account, gas: 80000 })
+    .send({ from: account, gas: 80000 }, async (error, txHash) => {
+      if (error) {
+        onTxHash && onTxHash(txHash);
+        console.log("Approval error", error);
+        onComplete && onComplete(error);
+        return false;
+      }
+      onTxHash && onTxHash(txHash);
+      const status = await waitTransaction(Flavor.web3.eth, txHash);
+
+      if (!status) {
+        console.log("Approval transaction failed.");
+        onComplete && onComplete('failed');
+        return false;
+      }
+      onComplete && onComplete();
+      return true;
+    })
+
 };
 
 export const deposit = async (
@@ -47,7 +68,8 @@ export const deposit = async (
   podContractAddress,
   amount,
   account,
-  onTxHash
+  onTxHash,
+  onComplete
 ) => {
   const flavorPodContract = Flavor.contracts.flavorPod; // TODO: change to flavorPod
   flavorPodContract.options.address = podContractAddress;
@@ -55,10 +77,10 @@ export const deposit = async (
   const gas = GAS_LIMIT.DEPOSITING.DEFAULT;
 
   const usdcAmount = new BigNumber(amount)
-    .times(new BigNumber(10).pow(6))
+    .times(new BigNumber(10).pow(USDC_POW))
     .toString();
 
-  window.console.log('depositing amount', amount, 'usdc amount', usdcAmount, 'account', account);
+  window.console.error('depositing amount', amount, 'usdc amount', usdcAmount, 'account', account);
   ///index.js:61 depositing amount 20 usdc amount 20000000
 // invalid arrayify value (argument="value", value="20000000", code=INVALID_ARGUMENT, version=bytes/5.0.4)
 
@@ -68,10 +90,12 @@ export const deposit = async (
           if (error) {
             onTxHash && onTxHash("");
             console.log("Depositing error", error);
+            onComplete && onComplete(error);
             return false;
           }
           onTxHash && onTxHash(txHash);
           const status = await waitTransaction(Flavor.web3.eth, txHash);
+          onComplete && onComplete();
           if (!status) {
             console.log("Depositing transaction failed.");
             return false;
@@ -85,7 +109,8 @@ export const withdraw = async (
   podContractAddress,
   amount,
   account,
-  onTxHash
+  onTxHash,
+  onComplete
 ) => {
   const flavorPodContract = Flavor.contracts.flavorPod; // TODO: change to flavorPod
   flavorPodContract.options.address = podContractAddress;
@@ -93,7 +118,7 @@ export const withdraw = async (
   const gas = GAS_LIMIT.DEPOSITING.DEFAULT;
 
   const usdcAmount = new BigNumber(amount)
-    .times(new BigNumber(10).pow(6))
+    .times(new BigNumber(10).pow(USDC_POW))
     .toString();
 
   window.console.log('withdrawing amount', amount, 'usdc amount', usdcAmount);
@@ -103,11 +128,13 @@ export const withdraw = async (
         .send({ from: account, gas }, async (error, txHash) => {
           if (error) {
             onTxHash && onTxHash("");
+            onComplete && onComplete(error);
             console.log("Depositing error", error);
             return false;
           }
           onTxHash && onTxHash(txHash);
           const status = await waitTransaction(Flavor.web3.eth, txHash);
+          onComplete && onComplete();
           if (!status) {
             console.log("Depositing transaction failed.");
             return false;

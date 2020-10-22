@@ -31,4 +31,4 @@ export const NETWORKS = {
   KOVAN: 42
 }
 
-export const DEFAULT_NETWORK = NETWORKS.MAINNET
+export const DEFAULT_NETWORK = NETWORKS.KOVAN

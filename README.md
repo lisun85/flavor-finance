@@ -1,6 +1,6 @@
 # flavor.finance
 
-A spicy new twist on yield farming.
+A spicy new twist on DeFi savings.
 
 
 ## Local Development
@@ -16,7 +16,7 @@ Make sure to run `gcloud auth application-default login` and `gcloud config set 
 
 From the `client` directory, run `yarn` to install dependencies, and `yarn start` to start the development server. The server should be available at `localhost:3000`.
 
-Run `yarn build` to build changes. 
+Run `yarn build` to build changes.
 
 
 ## Deployment

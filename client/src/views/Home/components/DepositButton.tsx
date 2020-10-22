@@ -6,8 +6,13 @@ import {
 } from 'react-neu'
 import { useWallet } from 'use-wallet'
 import useDeposit from 'hooks/useDeposit'
+
 import DepositModal from 'components/DepositModal'
 import UnlockWalletModal from 'components/UnlockWalletModal'
+import {
+  usdc as USDCAddress,
+  FlavorTokens as FlavorTokenAddresses,
+} from 'constants/tokenAddresses'
 
 interface DepositButtonProps {
   asset: string
@@ -28,8 +33,9 @@ const DepositButton: React.FC<DepositButtonProps> = ({
   const [depositModalIsOpen, setDepositModalIsOpen] = useState(false)
   const [unlockModalIsOpen, setUnlockModalIsOpen] = useState(false)
 
-  const { status } = useWallet()
+  const wallet = useWallet()
   const {
+    allowance,
     countdown,
     isApproved,
     isApproving,
@@ -41,8 +47,10 @@ const DepositButton: React.FC<DepositButtonProps> = ({
     stakedBalance,
   } = useDeposit()
 
+
   const handleDepositClick = useCallback(() => {
     setDepositModalIsOpen(true)
+    allowance.setSpenderAddress(FlavorTokenAddresses[asset]);
   }, [setDepositModalIsOpen])
 
   const handleDismissDepositClick = useCallback(() => {
@@ -51,6 +59,9 @@ const DepositButton: React.FC<DepositButtonProps> = ({
 
   const handleDismissUnlockModal = useCallback(() => {
     setUnlockModalIsOpen(false)
+    if (wallet.status !== 'connected') {
+      handleDepositClick();
+    }
   }, [setUnlockModalIsOpen])
 
   const handleUnlockWalletClick = useCallback(() => {
@@ -58,7 +69,7 @@ const DepositButton: React.FC<DepositButtonProps> = ({
   }, [setUnlockModalIsOpen])
 
   const depositBtn = useMemo(() => {
-    if (status !== 'connected') {
+    if (wallet.status !== 'connected') {
       return (
         <React.Fragment>
         <Button
@@ -86,25 +97,16 @@ const DepositButton: React.FC<DepositButtonProps> = ({
         />
       )
     }
-    if (!isApproved) {
+
+
+    if (isApproved || !isApproved) {
       return (
         <Button
-          disabled={isApproving}
           full
           size="sm"
           onClick={handleDepositClick}
-          text={!isApproving ? flavoredAssetSymbol(asset) : "Approving deposit..."}
-          variant={isApproving || status !== 'connected' ? 'secondary' : 'secondary'}
-        />
-      )
-    }
-
-    if (isApproved) {
-      return (
-        <Button
-          full
-          onClick={handleDepositClick}
-          text="Stake"
+          text={flavoredAssetSymbol(asset)}
+          variant="secondary"
         />
       )
     }
@@ -113,7 +115,7 @@ const DepositButton: React.FC<DepositButtonProps> = ({
     handleDepositClick,
     isApproving,
     onApprove,
-    status,
+    wallet,
   ])
   return (
     <>

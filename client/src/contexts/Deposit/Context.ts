@@ -8,7 +8,8 @@ const Context = createContext<ContextValues>({
   onRedeem: () => {},
   onDeposit: () => {},
   onWithdraw: () => {},
-  onUnstake: () => {}
+  onUnstake: () => {},
+  allowance: { allowance: undefined }
 })
 
 export default Context

@@ -65,6 +65,7 @@ export const getAllowance = async (
     const allowance: string = await tokenContract.methods.allowance(userAddress, spenderAddress).call()
     return allowance
   } catch (e) {
+    window.console.log('error getAllowance', e, userAddress, spenderAddress)
     return '0'
   }
 }
