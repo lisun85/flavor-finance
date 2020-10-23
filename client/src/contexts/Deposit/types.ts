@@ -6,6 +6,7 @@ export interface ContextValues {
   allowance?: any,
   isApproved?: boolean,
   isApproving?: boolean,
+  setIsApproved?: (val: boolean) => void,
   isHarvesting?: boolean,
   isRedeeming?: boolean,
   isStaking?: boolean,

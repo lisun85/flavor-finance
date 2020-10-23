@@ -50,23 +50,14 @@ const Provider: React.FC = ({ children }) => {
   // TODO: REPLACE THESE
   const flavorUniLpAddress = '';
   const flavorPoolAddress = '';//Flavor ? Flavor.contracts.flavor_pool.options.address : ''
-  const allowance = useDepositAllowance(USDCAddress)
+
   const { isApproved, isApproving, onApprove, setIsApproved } = useDepositApproval(
     USDCAddress,
     txHash => {
       setConfirmTxModalMessage('Approval is processing...')
     }
   )
-
-  useEffect(() => {
-    if (!isApproved && allowance.allowance?.toNumber()) {
-      window.console.log('setting is approved to true')
-      setIsApproved(true)
-    }
-  }, [
-    allowance,
-    setIsApproved,
-  ])
+  const allowance = useDepositAllowance(USDCAddress, setIsApproved)
 
   const fetchEarnedBalance = useCallback(async () => {
     if (!account || !Flavor) return
@@ -176,10 +167,6 @@ const Provider: React.FC = ({ children }) => {
     const assetAddress = FlavorTokenAddresses[asset]
     setConfirmTxModalIsOpen(true)
     setConfirmTxModalMessage('Confirm withdrawal in wallet')
-    // if (!isApproved){
-    //   await onApprove(assetAddress);
-    //   window.console.log('approved!', isApproved);
-    // }
     await withdraw(Flavor, assetAddress,
         amount, account, () => {
       setIsWithdrawing(true)
@@ -234,6 +221,7 @@ const Provider: React.FC = ({ children }) => {
       earnedBalance,
       isApproved,
       isApproving,
+      setIsApproved,
       isHarvesting,
       isRedeeming,
       isStaking,

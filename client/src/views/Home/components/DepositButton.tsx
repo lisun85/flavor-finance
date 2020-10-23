@@ -39,6 +39,7 @@ const DepositButton: React.FC<DepositButtonProps> = ({
     countdown,
     isApproved,
     isApproving,
+    setIsApproved,
     isStaking,
     isUnstaking,
     onApprove,
@@ -48,14 +49,16 @@ const DepositButton: React.FC<DepositButtonProps> = ({
   } = useDeposit()
 
 
-  const handleDepositClick = useCallback(() => {
+  const handleDepositClick = useCallback(async () => {
     setDepositModalIsOpen(true)
-    allowance.setSpenderAddress(FlavorTokenAddresses[asset]);
-  }, [setDepositModalIsOpen])
+    await allowance.setSpenderAddress(FlavorTokenAddresses[asset]);
+}, [setDepositModalIsOpen, wallet, allowance, asset])
 
   const handleDismissDepositClick = useCallback(() => {
     setDepositModalIsOpen(false)
-  }, [setDepositModalIsOpen])
+    allowance && allowance.setAllowance(undefined)
+    setIsApproved && setIsApproved(false)
+  }, [setDepositModalIsOpen, setIsApproved, allowance])
 
   const handleDismissUnlockModal = useCallback(() => {
     setUnlockModalIsOpen(false)
