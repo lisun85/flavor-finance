@@ -6,8 +6,8 @@ var transactionCount = -1;
 const _Web3 = () => {
 	const infuraSubdomain = process.env.NODE_ENV === 'production'
 		? 'mainnet'
-		: 'ropsten'
-	const web3 = new Web3(`https://${infuraSubdomain}.infura.io/v3/${process.env.INFURA_KEY}`);
+		: 'rinkeby'
+	const web3 = new Web3(`https://${infuraSubdomain}.infura.io/v3/${process.env.INFURA_API_KEY}`);
 	const signingAccount = web3.eth.accounts.privateKeyToAccount(process.env.ETH_PRIVATE_KEY);
 	web3.eth.accounts.wallet.add(signingAccount);
 	web3.eth.defaultAccount = signingAccount.address;
@@ -16,8 +16,8 @@ const _Web3 = () => {
 
 
 const getPrizeStrategyContract = web3 => {
-	const PrizeStrategyContractAddress = '0x6F5587E191C8b222F634C78111F97c4851663ba4';
-	const PrizeStrategyContractABI = JSON.parse(fs.readFileSync('./contracts/PeriodicPrizeStrategy.json', 'utf8'));
+	const PrizeStrategyContractAddress = '0xbf53e55f9901cd7109b704f2b7212095ec33d50b';
+	const PrizeStrategyContractABI = JSON.parse(fs.readFileSync('./src/contracts/FlavorPrizeStrategy.json', 'utf8'));
 	return new web3.eth.Contract(PrizeStrategyContractABI, PrizeStrategyContractAddress);
 }
 

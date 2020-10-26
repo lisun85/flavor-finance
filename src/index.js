@@ -51,7 +51,17 @@ app.get('/api/cyclePrizePeriod', (req, res, next) => {
 });
 
 app.get('/api/calculateWinner', (req, res, next) => {
+    // This API is only for testing
     asset.calculateWinner().then(results => {
+      res.json({ results });
+    })
+    .catch(next);
+});
+
+
+app.get('/api/completeAward', (req, res, next) => {
+    // This API is only for testing
+    asset.completeAward().then(results => {
       res.json({ results });
     })
     .catch(next);

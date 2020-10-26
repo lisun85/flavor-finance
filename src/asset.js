@@ -20,12 +20,14 @@ async function endPrizePeriod() {
 async function completeAward() {
   const web3 = web3interface._Web3();
   const prizeStrategyContract = web3interface.getPrizeStrategyContract(web3);
-  prizeStrategyContract.methods.completeAward()
+  console.log(`sending completeAward tx from account ${web3.eth.defaultAccount} with host ${web3.currentProvider.host}`);
+  prizeStrategyContract.methods.completeAward('safeOverride')
   .send({
     from: web3.eth.defaultAccount,
     gas: '1500000',
 		gasPrice: 20000000000
   }, async (error, txHash) => {
+    console.log('sent completeAward tx', txHash, error);
     if (error) {
         console.log("Depositing error", error)
         return false
@@ -204,5 +206,5 @@ async function getHistory() {
 
 
  export {
-     startPrizePeriod, endPrizePeriod, updateAssetPrices, getAssetPrices, calculateWinner, getHistory
+     startPrizePeriod, endPrizePeriod, updateAssetPrices, getAssetPrices, calculateWinner, getHistory, completeAward
  };
